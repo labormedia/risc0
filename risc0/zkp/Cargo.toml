@@ -59,6 +59,7 @@ metal = [
 test = [
   "dep:ff",
   "dep:lazy_static",
+  "dep:ndarray",
 ]
 prove = [
   "dep:ff",
