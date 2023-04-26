@@ -22,9 +22,9 @@
 // mod accum;
 // pub mod adapter;
 // pub mod executor;
-// mod fri;
+mod fri;
 mod merkle;
-// pub mod poly_group;
+pub mod poly_group;
 // pub mod prover;
 pub mod write_iop;
 
