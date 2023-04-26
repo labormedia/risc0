@@ -15,7 +15,7 @@
 //! CPU implementation of the HAL.
 
 use alloc::{rc::Rc, vec::Vec};
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 use core::{
     cell::{Ref, RefCell, RefMut},
     marker::PhantomData,
@@ -38,9 +38,10 @@ use crate::{
         hash::{
             blake2b::Blake2bCpuHashSuite,
             poseidon::PoseidonHashSuite,
-            poseidon_254::Poseidon254HashSuite,
+            // poseidon_254::Poseidon254HashSuite,
             sha::{cpu::Impl as CpuImpl, Sha256HashSuite},
-            HashFn, HashSuite,
+            HashFn,
+            HashSuite,
         },
         log2_ceil,
         ntt::{bit_rev_32, bit_reverse, evaluate_ntt, expand, interpolate_ntt},
@@ -54,6 +55,7 @@ pub struct CpuHal<F: Field, HS: HashSuite<F>> {
 
 pub type BabyBearSha256CpuHal = CpuHal<BabyBear, Sha256HashSuite<BabyBear, CpuImpl>>;
 pub type BabyBearPoseidonCpuHal = CpuHal<BabyBear, PoseidonHashSuite>;
+#[cfg(feature = "prove")]
 pub type BabyBearPoseidon254CpuHal = CpuHal<BabyBear, Poseidon254HashSuite>;
 pub type BabyBearBlake2bCpuHal = CpuHal<BabyBear, Blake2bCpuHashSuite>;
 
@@ -85,10 +87,10 @@ impl Region {
     }
 }
 
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 struct TrackedVec<T>(Vec<T>);
 
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 impl<T> TrackedVec<T> {
     pub fn new(vec: Vec<T>) -> Self {
         #[cfg(feature = "prove")]
