@@ -65,7 +65,7 @@ test = [
   "dep:rayon",
   "risc0-sys",
   "std",
-  "risc0-sys/cuda",
+#  "risc0-sys/cuda",
 ]
 prove = [
   "dep:ff",
