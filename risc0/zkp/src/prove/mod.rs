@@ -21,7 +21,7 @@
 
 mod accum;
 // pub mod adapter;
-// pub mod executor;
+pub mod executor;
 mod fri;
 mod merkle;
 pub mod poly_group;
