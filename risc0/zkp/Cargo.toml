@@ -57,12 +57,12 @@ metal = [
   "risc0-sys/metal",
 ]
 test = [
-  "dep:cust",
+#  "dep:cust",
   "dep:ff",
   "dep:lazy_static",
   "dep:ndarray",
-  "dep:rand",
-  "dep:rayon",
+#  "dep:rand",
+#  "dep:rayon",
   "risc0-sys",
   "std",
 #  "risc0-sys/cuda",

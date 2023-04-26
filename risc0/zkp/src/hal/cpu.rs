@@ -22,7 +22,9 @@ use core::{
 use std::{cell::RefCell, rc::Rc};
 
 use bytemuck::Pod;
+#[cfg(any(feature = "prove", feature = "test"))]
 use ndarray::{ArrayView, ArrayViewMut, Axis};
+#[cfg(any(feature = "prove"))]
 use rayon::prelude::*;
 use risc0_core::field::{baby_bear::BabyBear, Elem, ExtElem, Field};
 
@@ -324,10 +326,20 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         assert_eq!(out_size, in_size * (1 << expand_bits));
         assert_eq!(out_size * count, output.size());
         assert_eq!(in_size * count, input.size());
+        #[cfg(any(feature = "prove"))]
         output
             .as_slice_mut()
             .par_chunks_exact_mut(out_size)
             .zip(input.as_slice().par_chunks_exact(in_size))
+            .for_each(|(output, input)| {
+                expand(output, input, expand_bits);
+            });
+
+        #[cfg(not(feature = "prove"))]
+        output
+            .as_slice_mut()
+            .chunks_exact_mut(out_size)
+            .zip(input.as_slice().chunks_exact(in_size))
             .for_each(|(output, input)| {
                 expand(output, input, expand_bits);
             });
@@ -337,8 +349,15 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
     fn batch_evaluate_ntt(&self, io: &Self::Buffer<Self::Elem>, count: usize, expand_bits: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
+        #[cfg(any(feature = "prove"))]
         io.as_slice_mut()
             .par_chunks_exact_mut(row_size)
+            .for_each(|row| {
+                evaluate_ntt::<Self::Elem, Self::Elem>(row, expand_bits);
+            });
+        #[cfg(not(feature = "prove"))]
+        io.as_slice_mut()
+            .chunks_exact_mut(row_size)
             .for_each(|row| {
                 evaluate_ntt::<Self::Elem, Self::Elem>(row, expand_bits);
             });
@@ -348,8 +367,15 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
     fn batch_interpolate_ntt(&self, io: &Self::Buffer<Self::Elem>, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
+        #[cfg(any(feature = "prove"))]
         io.as_slice_mut()
             .par_chunks_exact_mut(row_size)
+            .for_each(|row| {
+                interpolate_ntt::<Self::Elem, Self::Elem>(row);
+            });
+        #[cfg(not(feature = "prove"))]
+        io.as_slice_mut()
+            .chunks_exact_mut(row_size)
             .for_each(|row| {
                 interpolate_ntt::<Self::Elem, Self::Elem>(row);
             });
@@ -359,8 +385,15 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
     fn batch_bit_reverse(&self, io: &Self::Buffer<Self::Elem>, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
+        #[cfg(any(feature = "prove"))]
         io.as_slice_mut()
             .par_chunks_exact_mut(row_size)
+            .for_each(|row| {
+                bit_reverse(row);
+            });
+        #[cfg(not(feature = "prove"))]
+        io.as_slice_mut()
+            .chunks_exact_mut(row_size)
             .for_each(|row| {
                 bit_reverse(row);
             });
@@ -384,6 +417,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let which = which.as_slice();
         let xs = xs.as_slice();
         let mut out = out.as_slice_mut();
+        #[cfg(any(feature = "prove"))]
         (&which[..], &xs[..], &mut out[..])
             .into_par_iter()
             .for_each(|(id, x, out)| {
@@ -398,6 +432,22 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
                 }
                 *out = tot;
             });
+        #[cfg(not(feature = "prove"))]
+        for i in 0..which.len() {
+            let id = &which[i];
+            let x = &xs[i];
+            let out_elem = &mut out[i];
+            let mut tot = Self::ExtElem::ZERO;
+            let mut cur = Self::ExtElem::ONE;
+            let id = *id as usize;
+            let count = 1 << po2;
+            let local = &coeffs[count * id..count * id + count];
+            for coeff in local {
+                tot += cur * *coeff;
+                cur *= *x;
+            }
+            *out_elem = tot;
+        }
     }
 
     #[tracing::instrument(skip_all)]
@@ -406,6 +456,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let count = io.size();
         assert_eq!(io.size(), poly_count * (1 << bits));
         let mut io = io.as_slice_mut();
+        #[cfg(any(feature = "prove"))]
         (&mut io[..], 0..count)
             .into_par_iter()
             .for_each(|(io, idx)| {
@@ -414,6 +465,14 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
                 let pow3 = Self::Elem::from_u64(3).pow(rev as usize);
                 *io = *io * pow3;
             });
+        #[cfg(not(feature = "prove"))]
+        for idx in 0..count {
+            let io = &mut io[idx];
+            let pos = idx & ((1 << bits) - 1);
+            let rev = bit_rev_32(pos as u32) >> (32 - bits);
+            let pow3 = Self::Elem::from_u64(3).pow(rev as usize);
+            *io = *io * pow3;
+        }
     }
 
     #[tracing::instrument(skip_all)]
@@ -448,9 +507,25 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let mix_pows: &[Self::ExtElem] = mix_pows.as_slice();
         let input: &[Self::Elem] = &input.as_slice();
 
+        #[cfg(any(feature = "prove"))]
         output
             .as_slice_mut()
             .par_chunks_exact_mut(count)
+            .enumerate()
+            .for_each(|(id, out_chunk): (usize, &mut [Self::ExtElem])| {
+                for i in 0..input_size {
+                    if combos[i] != id as u32 {
+                        continue;
+                    }
+                    for idx in 0..count {
+                        out_chunk[idx] += mix_pows[i] * input[count * i + idx];
+                    }
+                }
+            });
+        #[cfg(not(feature = "prove"))]
+        output
+            .as_slice_mut()
+            .chunks_exact_mut(count)
             .enumerate()
             .for_each(|(id, out_chunk): (usize, &mut [Self::ExtElem])| {
                 for i in 0..input_size {
@@ -476,11 +551,19 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let mut output = output.as_slice_mut();
         let input1 = input1.as_slice();
         let input2 = input2.as_slice();
+        #[cfg(any(feature = "prove"))]
         (&mut output[..], &input1[..], &input2[..])
             .into_par_iter()
             .for_each(|(o, a, b)| {
                 *o = *a + *b;
             });
+        #[cfg(not(feature = "prove"))]
+        for i in 0..output.len() {
+            let o = &mut output[i];
+            let a = &input1[i];
+            let b = &input2[i];
+            *o = *a + *b;
+        }
     }
 
     #[tracing::instrument(skip_all)]
@@ -496,10 +579,27 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let mut output = output.as_slice_mut();
         let mut output =
             ArrayViewMut::from_shape((Self::ExtElem::EXT_SIZE, count), &mut output).unwrap();
+        #[cfg(any(feature = "prove"))]
         let output = output.axis_iter_mut(Axis(1)).into_par_iter();
+        #[cfg(not(feature = "prove"))]
+        let output = output.axis_iter_mut(Axis(1)).into_iter();
         let input = input.as_slice();
         let input = ArrayView::from_shape((to_add, count), &input).unwrap();
+        #[cfg(any(feature = "prove"))]
         let input = input.axis_iter(Axis(1)).into_par_iter();
+        #[cfg(not(feature = "prove"))]
+        let input = input.axis_iter(Axis(1)).into_iter();
+        #[cfg(any(feature = "prove"))]
+        output.zip(input).for_each(|(mut output, input)| {
+            let mut sum = Self::ExtElem::ZERO;
+            for i in input {
+                sum += *i;
+            }
+            for i in 0..Self::ExtElem::EXT_SIZE {
+                output[i] = sum.subelems()[i]
+            }
+        });
+        #[cfg(not(feature = "prove"))]
         output.zip(input).for_each(|(mut output, input)| {
             let mut sum = Self::ExtElem::ZERO;
             for i in input {
@@ -521,6 +621,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         assert_eq!(count, input.size());
         let mut output = output.as_slice_mut();
         let input = input.as_slice();
+        #[cfg(any(feature = "prove"))]
         (&mut output[..], &input[..])
             .into_par_iter()
             .for_each(|(output, input)| {
@@ -567,6 +668,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         assert_eq!(matrix.size(), col_size * row_size);
         let mut output = output.as_slice_mut();
         let matrix = matrix.as_slice().to_vec(); // TODO: avoid copy
+        #[cfg(any(feature = "prove"))]
         output.par_iter_mut().enumerate().for_each(|(idx, output)| {
             let column: Vec<Self::Elem> =
                 (0..col_size).map(|i| matrix[i * row_size + idx]).collect();
@@ -580,6 +682,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let io = io.as_slice_sync();
         let output = io.slice(output_size, output_size);
         let input = io.slice(input_size, input_size);
+        #[cfg(any(feature = "prove"))]
         (0..output.size()).into_par_iter().for_each(|idx| {
             let in1 = input.get(2 * idx + 0);
             let in2 = input.get(2 * idx + 1);
