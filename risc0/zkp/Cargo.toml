@@ -63,7 +63,7 @@ test = [
 #  "dep:ndarray",
 #  "dep:rand",
 #  "dep:rayon",
-  "risc0-sys",
+#  "risc0-sys",
   "std",
 #  "risc0-sys/cuda",
 ]
