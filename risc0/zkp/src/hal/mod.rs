@@ -25,6 +25,7 @@ pub mod metal;
 use std::sync::Mutex;
 
 use bytemuck::Pod;
+#[cfg(feature = "prove")]
 use lazy_static::lazy_static;
 use risc0_core::field::{Elem, ExtElem, Field, RootsOfUnity};
 

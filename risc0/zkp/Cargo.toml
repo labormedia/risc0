@@ -58,7 +58,7 @@ metal = [
 ]
 minimal = [
   "dep:ff",
-  "dep:lazy_static",
+#  "dep:lazy_static",
   "risc0-sys",
 ]
 test = [
