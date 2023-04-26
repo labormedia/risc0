@@ -15,17 +15,85 @@
 //! Interface between the circuit and prover/verifier
 
 use alloc::vec::Vec;
+use core::cell::RefMut;
 
 use anyhow::Result;
+use bytemuck::Pod;
 use risc0_core::field::{Elem, ExtElem, Field};
 
-use crate::{hal::cpu::SyncSlice, taps::TapSet};
+// use crate::{hal::cpu::SyncSlice, taps::TapSet};
+use crate::taps::TapSet;
 
 // TODO: Remove references to these constants so we don't depend on a
 // fixed set of register groups.
 pub const REGISTER_GROUP_ACCUM: usize = 0;
 pub const REGISTER_GROUP_CODE: usize = 1;
 pub const REGISTER_GROUP_DATA: usize = 2;
+
+enum SyncSliceRef<'a, T: Default + Clone + Pod> {
+    FromBuf(RefMut<'a, [T]>),
+    FromSlice(&'a SyncSlice<'a, T>),
+}
+
+/// A buffer which can be used across multiple threads.  Users are
+/// responsible for ensuring that no two threads access the same
+/// element at the same time.
+pub struct SyncSlice<'a, T: Default + Clone + Pod> {
+    _buf: SyncSliceRef<'a, T>,
+    ptr: *mut T,
+    size: usize,
+}
+
+// SAFETY: SyncSlice keeps a RefMut to the original CpuBuffer, so
+// no other as_slice or as_slice_muts can be active at the same time.
+//
+// The user of the SyncSlice is responsible for ensuring that no
+// two threads access the same elements at the same time.
+unsafe impl<'a, T: Default + Clone + Pod> Sync for SyncSlice<'a, T> {}
+
+impl<'a, T: Default + Clone + Pod> SyncSlice<'a, T> {
+    pub fn new(mut buf: RefMut<'a, [T]>) -> Self {
+        let ptr = buf.as_mut_ptr();
+        let size = buf.len();
+        SyncSlice {
+            ptr,
+            size,
+            _buf: SyncSliceRef::FromBuf(buf),
+        }
+    }
+
+    pub fn get_ptr(&self) -> *mut T {
+        self.ptr
+    }
+
+    pub fn get(&self, offset: usize) -> T {
+        assert!(offset < self.size);
+        unsafe { self.ptr.add(offset).read() }
+    }
+
+    pub fn set(&self, offset: usize, val: T) {
+        assert!(offset < self.size);
+        unsafe { self.ptr.add(offset).write(val) }
+    }
+
+    pub fn slice(&self, offset: usize, size: usize) -> SyncSlice<'_, T> {
+        assert!(
+            offset + size <= self.size,
+            "Attempting to slice [{offset}, {offset} + {size} = {}) from a slice of length {}",
+            offset + size,
+            self.size
+        );
+        SyncSlice {
+            _buf: SyncSliceRef::FromSlice(self),
+            ptr: unsafe { self.ptr.add(offset) },
+            size: size,
+        }
+    }
+
+    pub fn size(&self) -> usize {
+        self.size
+    }
+}
 
 #[derive(Clone, Copy)]
 pub struct MixState<EE: ExtElem> {
