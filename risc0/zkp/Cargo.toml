@@ -58,13 +58,13 @@ metal = [
 ]
 test = [
 #  "dep:cust",
-#  "dep:ff",
-#  "dep:lazy_static",
+  "dep:ff",
+  "dep:lazy_static",
 #  "dep:ndarray",
 #  "dep:rand",
 #  "dep:rayon",
 #  "risc0-sys",
-#  "std",
+  "std",
 #  "risc0-sys/cuda",
 ]
 prove = [
