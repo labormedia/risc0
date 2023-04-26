@@ -17,7 +17,7 @@
 #![deny(rustdoc::broken_intra_doc_links)]
 
 extern crate alloc;
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 extern crate ff;
 
 pub mod adapter;
