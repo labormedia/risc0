@@ -56,7 +56,9 @@ metal = [
   "prove",
   "risc0-sys/metal",
 ]
-test = []
+test = [
+  "dep:ff",
+]
 prove = [
   "dep:ff",
   "dep:lazy_static",
