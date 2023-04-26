@@ -17,17 +17,19 @@ use core::cmp::max;
 use anyhow::{bail, Result};
 use log::debug;
 use rand::thread_rng;
+#[cfg(feature = "prove")]
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
 
+#[cfg(any(feature = "prove", feature = "test"))]
+use crate::hal::{
+    cpu::{CpuBuffer, SyncSlice},
+    Buffer,
+};
 use crate::{
     adapter::{
         CircuitDef, CircuitStepContext, CircuitStepHandler, REGISTER_GROUP_CODE,
         REGISTER_GROUP_DATA,
-    },
-    hal::{
-        cpu::{CpuBuffer, SyncSlice},
-        Buffer,
     },
     MIN_PO2, ZK_CYCLES,
 };
@@ -217,10 +219,17 @@ where
         self.compute_verify();
 
         // Zero out 'invalid' entries in data and output.
+        #[cfg(feature = "prove")]
         self.data
             .as_slice_mut()
             .par_iter_mut()
             .chain(self.io.as_slice_mut().par_iter_mut())
+            .for_each(|value| *value = value.valid_or_zero());
+        #[cfg(not(feature = "prove"))]
+        self.data
+            .as_slice_mut()
+            .iter_mut()
+            .chain(self.io.as_slice_mut().iter_mut())
             .for_each(|value| *value = value.valid_or_zero());
     }
 }

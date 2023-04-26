@@ -22,7 +22,7 @@ use core::{
 use std::{cell::RefCell, rc::Rc};
 
 use bytemuck::Pod;
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove"))]
 use ndarray::{ArrayView, ArrayViewMut, Axis};
 #[cfg(any(feature = "prove"))]
 use rayon::prelude::*;
@@ -264,6 +264,7 @@ impl<T: Pod> Buffer<T> for CpuBuffer<T> {
     }
 }
 
+#[cfg(all(feature = "prove"))]
 impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
     type Field = F;
     type Elem = F::Elem;
