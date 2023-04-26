@@ -26,7 +26,7 @@ pub mod core;
 pub mod hal;
 pub mod layout;
 mod merkle;
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 pub mod prove;
 pub mod taps;
 pub mod verify;
