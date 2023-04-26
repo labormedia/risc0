@@ -25,7 +25,7 @@ mod accum;
 mod fri;
 mod merkle;
 pub mod poly_group;
-pub mod prover;
+// pub mod prover;
 pub mod write_iop;
 
 // pub use prover::Prover;
