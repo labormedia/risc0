@@ -22,16 +22,16 @@ extern crate ff;
 
 pub mod adapter;
 pub mod core;
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove"))]
 pub mod hal;
 pub mod layout;
 mod merkle;
-#[cfg(any(feature = "prove", feature = "test"))]
+#[cfg(any(feature = "prove"))]
 pub mod prove;
 pub mod taps;
 pub mod verify;
 
-#[cfg(not(any(feature = "prove", feature = "test")))]
+#[cfg(not(any(feature = "prove")))]
 pub mod hal {
     pub mod cpu {
         use core::marker::PhantomData;
