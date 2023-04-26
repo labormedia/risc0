@@ -16,7 +16,7 @@
 
 pub mod blake2b;
 pub mod poseidon;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature = "test"))]
 pub mod poseidon_254;
 pub mod sha;
 
