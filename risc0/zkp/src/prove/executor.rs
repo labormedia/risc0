@@ -16,6 +16,7 @@ use core::cmp::max;
 
 use anyhow::{bail, Result};
 use log::debug;
+#[cfg(all(feature = "prove"))]
 use rand::thread_rng;
 #[cfg(feature = "prove")]
 use rayon::prelude::*;
@@ -166,6 +167,7 @@ where
         new_buf
     }
 
+    #[cfg(all(feature = "prove"))]
     fn compute_verify(&mut self) {
         let mut rng = thread_rng();
         let code_buf = self.code.as_slice_sync();
@@ -216,6 +218,7 @@ where
         assert!(self.halted);
         assert_eq!(self.cycle, self.steps - ZK_CYCLES);
 
+        #[cfg(all(feature = "prove"))]
         self.compute_verify();
 
         // Zero out 'invalid' entries in data and output.
