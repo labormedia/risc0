@@ -181,6 +181,7 @@ impl MemoryTracker {
 
 #[cfg(test)]
 #[allow(unused)]
+#[cfg(feature = "prove")]
 mod testutil {
     // TODO: Not fully generic over hash
     use rand::{thread_rng, RngCore};
