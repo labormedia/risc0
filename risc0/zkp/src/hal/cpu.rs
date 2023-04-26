@@ -14,19 +14,24 @@
 
 //! CPU implementation of the HAL.
 
+use alloc::{rc::Rc, vec::Vec};
+#[cfg(any(feature = "prove", feature = "test"))]
 use core::{
-    cell::{Ref, RefMut},
+    cell::{Ref, RefCell, RefMut},
     marker::PhantomData,
     ops::Range,
 };
-use std::{cell::RefCell, rc::Rc};
 
 use bytemuck::Pod;
+#[cfg(feature = "prove")]
 use ndarray::{ArrayView, ArrayViewMut, Axis};
+#[cfg(feature = "prove")]
 use rayon::prelude::*;
 use risc0_core::field::{baby_bear::BabyBear, Elem, ExtElem, Field};
 
-use super::{Buffer, Hal, TRACKER};
+#[cfg(feature = "prove")]
+use super::TRACKER;
+use super::{Buffer, Hal};
 use crate::{
     core::{
         digest::Digest,
@@ -80,24 +85,28 @@ impl Region {
     }
 }
 
+#[cfg(any(feature = "prove", feature = "test"))]
 struct TrackedVec<T>(Vec<T>);
 
+#[cfg(any(feature = "prove", feature = "test"))]
 impl<T> TrackedVec<T> {
     pub fn new(vec: Vec<T>) -> Self {
+        #[cfg(feature = "prove")]
         TRACKER
             .lock()
             .unwrap()
-            .alloc(vec.capacity() * std::mem::size_of::<T>());
+            .alloc(vec.capacity() * core::mem::size_of::<T>());
         Self(vec)
     }
 }
 
+#[cfg(feature = "prove")]
 impl<T> Drop for TrackedVec<T> {
     fn drop(&mut self) {
         TRACKER
             .lock()
             .unwrap()
-            .free(self.0.capacity() * std::mem::size_of::<T>());
+            .free(self.0.capacity() * core::mem::size_of::<T>());
     }
 }
 
@@ -172,6 +181,7 @@ impl<'a, T: Default + Clone + Pod> SyncSlice<'a, T> {
     }
 }
 
+#[cfg(feature = "prove")]
 impl<T: Default + Clone + Pod> CpuBuffer<T> {
     fn new(size: usize) -> Self {
         let buf = vec![T::default(); size];
@@ -262,6 +272,7 @@ impl<T: Pod> Buffer<T> for CpuBuffer<T> {
     }
 }
 
+#[cfg(feature = "prove")]
 impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
     type Field = F;
     type Elem = F::Elem;
@@ -483,6 +494,7 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
             });
     }
 
+    #[cfg(feature = "prove")]
     #[tracing::instrument(skip_all)]
     fn eltwise_sum_extelem(
         &self,

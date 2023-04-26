@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+pub use alloc::vec::Vec;
+
 use ff::PrimeField;
 use lazy_static::lazy_static;
 

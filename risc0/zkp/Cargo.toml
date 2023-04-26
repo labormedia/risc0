@@ -60,7 +60,6 @@ test = [
   "dep:ff",
   "dep:lazy_static",
   "risc0-sys",
-  "std"
 ]
 prove = [
   "dep:ff",

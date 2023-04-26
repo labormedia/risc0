@@ -16,6 +16,8 @@
 //! security of 128 bits.
 pub(crate) mod consts;
 
+pub use alloc::boxed::Box;
+
 use risc0_core::field::{
     baby_bear::{BabyBear, BabyBearElem, BabyBearExtElem},
     Elem, ExtElem,

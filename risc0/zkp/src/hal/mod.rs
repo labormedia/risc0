@@ -21,6 +21,7 @@ pub mod cuda;
 #[cfg(feature = "metal")]
 pub mod metal;
 
+#[cfg(feature = "prove")]
 use std::sync::Mutex;
 
 use bytemuck::Pod;
@@ -35,6 +36,7 @@ use crate::{
     INV_RATE,
 };
 
+#[cfg(feature = "prove")]
 lazy_static! {
     static ref TRACKER: Mutex<MemoryTracker> = Mutex::new(MemoryTracker::new());
 }
@@ -60,6 +62,7 @@ pub trait Hal {
 
     const CHECK_SIZE: usize = INV_RATE * Self::ExtElem::EXT_SIZE;
 
+    #[cfg(feature = "prove")]
     fn get_memory_usage(&self) -> usize {
         TRACKER.lock().unwrap().peak
     }
