@@ -45,7 +45,7 @@ test-log = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [features]
-default = []
+default = [ "prove" ]
 cuda = [
   "dep:cust",
   "prove",
@@ -60,9 +60,9 @@ prove = [
   "dep:ff",
   "dep:lazy_static",
   "dep:ndarray",
-#  "dep:rand",
+  "dep:rand",
   "dep:rayon",
-#  "risc0-sys",
+  "risc0-sys",
   "std",
 ]
 std = ["anyhow/std"]
