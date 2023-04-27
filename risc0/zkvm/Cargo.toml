@@ -81,7 +81,12 @@ profiler = [
   "dep:protobuf-src"
 ]
 test = [
-  "binfmt"
+  "dep:elf",
+  "anyhow/std",
+  "num-traits/std",
+  "risc0-circuit-rv32im/std",
+#  "risc0-zkp/std",
+  "serde/std",
 ]
 prove = [
   "binfmt",
