@@ -54,6 +54,7 @@
 //!
 //! [^starter-ex]: The example is based on the [RISC Zero Rust Starter repository](https://github.com/risc0/risc0-rust-starter).
 
+#![feature(asm_experimental_arch)]
 #![allow(unused)]
 #![deny(missing_docs)]
 
