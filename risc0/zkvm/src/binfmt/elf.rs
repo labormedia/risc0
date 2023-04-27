@@ -21,7 +21,7 @@ use alloc::{
 use core::{fmt::Display, result::Result};
 
 use anyhow::{anyhow, bail, Context};
-use elf::{self, endian::LittleEndian, file::Class, ElfBytes};
+use elf::{endian::LittleEndian, file::Class, ElfBytes};
 
 /// A RISC Zero program
 pub struct Program {
