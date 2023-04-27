@@ -68,10 +68,10 @@ tar = "0.4"
 test-log = { version = "0.2", features = ["trace"] }
 
 [features]
-binfmt = ["dep:elf", "std"]
+binfmt = ["dep:elf", "test"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
-default = ["test"]
+default = ["binfmt"]
 dual = []
 profiler = [
   "dep:addr2line",
@@ -81,12 +81,11 @@ profiler = [
   "dep:protobuf-src"
 ]
 test = [
-  "dep:elf",
   "anyhow/std",
-  "num-traits/std",
-  "risc0-circuit-rv32im/std",
+#  "num-traits/std",
+#  "risc0-circuit-rv32im/std",
 #  "risc0-zkp/std",
-  "serde/std",
+#  "serde/std",
 ]
 prove = [
   "binfmt",
