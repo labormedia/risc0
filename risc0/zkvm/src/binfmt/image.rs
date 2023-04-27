@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use alloc::{
-    vec,
-    vec::Vec
-};
+use alloc::{vec, vec::Vec};
 
 use anyhow::{Context, Result};
+use log;
 use risc0_zkp::core::{
     digest::Digest,
     hash::sha::{Sha256, BLOCK_BYTES, SHA256_INIT},
