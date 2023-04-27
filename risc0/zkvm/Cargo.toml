@@ -81,7 +81,7 @@ profiler = [
   "dep:protobuf-src"
 ]
 test = [
-
+  "binfmt"
 ]
 prove = [
   "binfmt",
