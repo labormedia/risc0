@@ -32,21 +32,6 @@ pub struct Program {
     pub image: BTreeMap<u32, u32>,
 }
 
-#[derive(Debug)]
-enum ProgramErrors {
-    Error(String),
-}
-
-impl Display for ProgramErrors {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self {
-            ProgramErrors::Error(msg) => write!(f, "{}", msg),
-        }
-    }
-}
-
-impl core::error::Error for ProgramErrors {}
-
 impl Program {
     /// Initialize a RISC Zero Program from an appropriate ELF file
     pub fn load_elf(input: &[u8], max_mem: u32) -> Result<Program, String> {
