@@ -18,6 +18,7 @@
 #![deny(rustdoc::broken_intra_doc_links)]
 #![deny(missing_docs)]
 #![feature(error_in_core)]
+#![feature(asm_experimental_arch)]
 
 extern crate alloc;
 
