@@ -14,7 +14,7 @@
 
 //! CPU implementation of the HAL.
 
-use alloc::{rc::Rc, vec::Vec};
+use alloc::{rc::Rc, vec, vec::Vec};
 #[cfg(any(feature = "prove", feature = "test", feature = "minimal"))]
 use core::{
     cell::{Ref, RefCell, RefMut},
@@ -183,7 +183,7 @@ impl<'a, T: Default + Clone + Pod> SyncSlice<'a, T> {
     }
 }
 
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature = "minimal"))]
 impl<T: Default + Clone + Pod> CpuBuffer<T> {
     fn new(size: usize) -> Self {
         let buf = vec![T::default(); size];
