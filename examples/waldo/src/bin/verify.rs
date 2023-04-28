@@ -21,7 +21,7 @@ use waldo_core::{
     image::{ImageMerkleTree, IMAGE_CHUNK_SIZE},
     Journal,
 };
-use waldo_methods::IMAGE_CROP_ID;
+// use waldo_methods::IMAGE_CROP_ID;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -52,7 +52,33 @@ fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
     let args = Args::parse();
+    // verify_image(receipt);
 
+    if args.no_display {
+        println!(
+            "IMPORTANT: Verify that the cutout in {} contains Waldo.",
+            &args.waldo.display()
+        );
+    } else {
+        // Display the image in the terminal for them to see whether it's Waldo.
+        let viuer_config = viuer::Config {
+            absolute_offset: false,
+            ..Default::default()
+        };
+        viuer::print_from_file(&args.waldo, &viuer_config)?;
+        println!("Prover knows where this cutout is in the given image.");
+        println!("Do you recognize this Waldo?");
+    }
+
+    Ok(())
+}
+
+fn verify_image(
+    receipt: SessionReceipt,
+    img_merkle_tree: ImageMerkleTree<{ IMAGE_CHUNK_SIZE }>,
+    args: Args,
+) -> Result<(), Box<dyn Error>> {
+    use waldo_methods::IMAGE_CROP_ID;
     // Read the full Where's Waldo image from disk.
     let img = ImageReader::open(&args.image)?.decode()?;
     println!(
@@ -71,6 +97,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Load and verify the receipt file.
     let receipt: SessionReceipt = bincode::deserialize(&fs::read(&args.receipt)?)?;
+
     receipt.verify(IMAGE_CROP_ID)?;
 
     // Check consistency of the journal against the input Where's Waldo image.
@@ -108,22 +135,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Save the image to disk for the verifier to inspect.
     subimage.save(&args.waldo)?;
     println!("Saved Waldo cutout to {}", &args.waldo.display());
-
-    if args.no_display {
-        println!(
-            "IMPORTANT: Verify that the cutout in {} contains Waldo.",
-            &args.waldo.display()
-        );
-    } else {
-        // Display the image in the terminal for them to see whether it's Waldo.
-        let viuer_config = viuer::Config {
-            absolute_offset: false,
-            ..Default::default()
-        };
-        viuer::print_from_file(&args.waldo, &viuer_config)?;
-        println!("Prover knows where this cutout is in the given image.");
-        println!("Do you recognize this Waldo?");
-    }
 
     Ok(())
 }
