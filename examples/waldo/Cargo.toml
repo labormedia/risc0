@@ -12,7 +12,7 @@ risc0-zkvm = { path = "../../risc0/zkvm", default-features = false }
 serde = "1.0"
 viuer = "0.6"
 waldo-core = { path = "core" }
-waldo-methods = { path = "methods" }
+#waldo-methods = { path = "methods" }
 
 [features]
 cuda = ["risc0-zkvm/cuda"]

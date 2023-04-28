@@ -16,7 +16,6 @@
 use std::error::Error;
 
 use clap::Parser;
-// use waldo_methods::IMAGE_CROP_ID;
 use waldo::Args;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -24,7 +23,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let args = Args::parse();
     // verify_image(receipt);
-    waldo::verify_image(&args)?;
+    // waldo::verify_image(&args)?;
 
     if args.no_display {
         println!(

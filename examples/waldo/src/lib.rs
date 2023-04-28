@@ -7,6 +7,8 @@ use waldo_core::{
     image::{ImageMerkleTree, IMAGE_CHUNK_SIZE},
     Journal,
 };
+#[cfg(not(feature = "minimal"))]
+use waldo_methods::IMAGE_CROP_ID;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -34,7 +36,6 @@ pub struct Args {
 }
 
 pub fn verify_image(args: &Args) -> Result<(), Box<dyn Error>> {
-    use waldo_methods::IMAGE_CROP_ID;
     // Read the full Where's Waldo image from disk.
     let img = ImageReader::open(&args.image)?.decode()?;
     println!(
@@ -54,6 +55,7 @@ pub fn verify_image(args: &Args) -> Result<(), Box<dyn Error>> {
     // Load and verify the receipt file.
     let receipt: SessionReceipt = bincode::deserialize(&fs::read(&args.receipt)?)?;
 
+    #[cfg(not(feature = "minimal"))]
     receipt.verify(IMAGE_CROP_ID)?;
 
     // Check consistency of the journal against the input Where's Waldo image.
