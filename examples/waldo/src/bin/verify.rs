@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#![feature(type_ascription)]
 
 use std::{error::Error, fs, path::PathBuf};
 
@@ -53,6 +54,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let args = Args::parse();
     // verify_image(receipt);
+    verify_image(&args)?;
 
     if args.no_display {
         println!(
@@ -73,11 +75,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn verify_image(
-    receipt: SessionReceipt,
-    img_merkle_tree: ImageMerkleTree<{ IMAGE_CHUNK_SIZE }>,
-    args: Args,
-) -> Result<(), Box<dyn Error>> {
+fn verify_image(args: &Args) -> Result<(), Box<dyn Error>> {
     use waldo_methods::IMAGE_CROP_ID;
     // Read the full Where's Waldo image from disk.
     let img = ImageReader::open(&args.image)?.decode()?;
