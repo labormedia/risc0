@@ -71,7 +71,7 @@ test-log = { version = "0.2", features = ["trace"] }
 binfmt = ["dep:elf", "test"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
-default = ["test"]
+default = ["binfmt"]
 dual = []
 profiler = [
   "dep:addr2line",
