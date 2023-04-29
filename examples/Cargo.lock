@@ -1682,6 +1682,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "image"
+version = "0.24.6"
+source = "git+https://github.com/labormedia/image.git?branch=fix-dependencies#1f148d79bd2b55673efd4aba4bb5c4c49eeebd00"
+dependencies = [
+ "bytemuck",
+ "color_quant",
+ "num-rational",
+ "num-traits",
+]
+
+[[package]]
 name = "impl-codec"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3858,7 +3869,7 @@ dependencies = [
  "base64 0.13.1",
  "console",
  "crossterm",
- "image",
+ "image 0.24.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static",
  "tempfile",
  "termcolor",
@@ -3871,7 +3882,7 @@ dependencies = [
  "bincode",
  "clap 4.2.5",
  "env_logger",
- "image",
+ "image 0.24.6 (git+https://github.com/labormedia/image.git?branch=fix-dependencies)",
  "risc0-zkvm",
  "serde",
  "viuer",
@@ -3888,7 +3899,7 @@ dependencies = [
  "divrem",
  "elsa",
  "hex",
- "image",
+ "image 0.24.6 (git+https://github.com/labormedia/image.git?branch=fix-dependencies)",
  "merkle_light",
  "merkle_light_derive",
  "rand",

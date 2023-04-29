@@ -16,30 +16,16 @@
 use std::error::Error;
 
 use clap::Parser;
+#[cfg(not(feature = "minimal"))]
 use waldo::Args;
 
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
+    #[cfg(not(feature = "minimal"))]
     let args = Args::parse();
-    // verify_image(receipt);
-    // waldo::verify_image(&args)?;
-
-    if args.no_display {
-        println!(
-            "IMPORTANT: Verify that the cutout in {} contains Waldo.",
-            &args.waldo.display()
-        );
-    } else {
-        // Display the image in the terminal for them to see whether it's Waldo.
-        let viuer_config = viuer::Config {
-            absolute_offset: false,
-            ..Default::default()
-        };
-        viuer::print_from_file(&args.waldo, &viuer_config)?;
-        println!("Prover knows where this cutout is in the given image.");
-        println!("Do you recognize this Waldo?");
-    }
+    #[cfg(not(feature = "minimal"))]
+    waldo::verify_image(&args)?;
 
     Ok(())
 }

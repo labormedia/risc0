@@ -116,6 +116,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69dde51e8fef5e12c1d65e0929b03d66e4c0c18282bc30ed2ca050ad6f44dd82"
 
 [[package]]
+name = "elf"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2b183d6ce6ca4cf30e3db37abf5b52568b5f9015c97d9fbdd7026aa5dcdd758"
+
+[[package]]
 name = "elsa"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -165,10 +171,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "image"
+version = "0.24.6"
+source = "git+https://github.com/labormedia/image.git?branch=fix-dependencies#1f148d79bd2b55673efd4aba4bb5c4c49eeebd00"
+dependencies = [
+ "bytemuck",
+ "color_quant",
+ "num-rational",
+ "num-traits",
+]
+
+[[package]]
 name = "image_crop"
 version = "0.1.0"
 dependencies = [
- "image",
+ "image 0.24.5",
  "risc0-zkvm",
  "waldo-core",
 ]
@@ -334,6 +351,7 @@ dependencies = [
  "anyhow",
  "bytemuck",
  "cfg-if",
+ "elf",
  "getrandom",
  "hex",
  "log",
@@ -486,7 +504,7 @@ dependencies = [
  "bytemuck",
  "divrem",
  "elsa",
- "image",
+ "image 0.24.6",
  "merkle_light",
  "merkle_light_derive",
  "risc0-zkvm",

@@ -9,7 +9,7 @@ bincode = "1.3"
 bytemuck = "1.12"
 divrem = "1.0"
 elsa = "1.7"
-image = { version = "0.24", default-features = false }
+image = { version = "0.24", git = "https://github.com/labormedia/image.git", branch = "fix-dependencies",default-features = false }
 merkle_light = "0.4"
 merkle_light_derive = "0.4"
 risc0-zkvm = { path = "../../../risc0/zkvm", default-features = false, features = [ "binfmt" ] }
