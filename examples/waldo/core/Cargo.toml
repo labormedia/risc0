@@ -13,7 +13,7 @@ image = { version = "0.24", git = "https://github.com/labormedia/image.git", bra
 merkle_light = "0.4"
 merkle_light_derive = "0.4"
 risc0-zkvm = { path = "../../../risc0/zkvm", default-features = false, features = [ "binfmt" ] }
-serde = "1.0"
+serde = {version="1.0", default-features = false}
 
 [dev-dependencies]
 hex = "0.4"
@@ -21,5 +21,5 @@ rand = "0.8"
 sha2 = "0.10"
 
 [features]
-default = ["minimal"]
-minimal = ["dep:image"]
+default = ["dep:image"]
+minimal = []
