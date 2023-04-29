@@ -18,4 +18,4 @@ waldo-methods = { path = "methods", optional = true }
 cuda = ["risc0-zkvm/cuda"]
 default = [ "minimal" ]
 metal = ["risc0-zkvm/metal"]
-minimal = [ "risc0-zkvm/binfmt", "dep:waldo-core", "dep:image" ]
+minimal = [ "risc0-zkvm/binfmt", "dep:waldo-core" ]
