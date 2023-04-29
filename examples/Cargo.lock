@@ -3876,6 +3876,7 @@ dependencies = [
  "serde",
  "viuer",
  "waldo-core",
+ "waldo-methods",
 ]
 
 [[package]]
@@ -3894,6 +3895,13 @@ dependencies = [
  "risc0-zkvm",
  "serde",
  "sha2",
+]
+
+[[package]]
+name = "waldo-methods"
+version = "0.1.0"
+dependencies = [
+ "risc0-build",
 ]
 
 [[package]]
