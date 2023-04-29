@@ -12,7 +12,7 @@ elsa = "1.7"
 image = { version = "0.24", default-features = false }
 merkle_light = "0.4"
 merkle_light_derive = "0.4"
-risc0-zkvm = { path = "../../../risc0/zkvm", default-features = false }
+risc0-zkvm = { path = "../../../risc0/zkvm", default-features = false, features = [ "binfmt" ] }
 serde = "1.0"
 
 [dev-dependencies]
