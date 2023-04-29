@@ -16,11 +16,13 @@
 
 use core::error::Error;
 
+#[cfg(not(feature = "minimal"))]
 use clap::Parser;
 #[cfg(not(feature = "minimal"))]
 use waldo::Args;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    #[cfg(not(feature = "minimal"))]
     env_logger::init();
 
     #[cfg(not(feature = "minimal"))]
