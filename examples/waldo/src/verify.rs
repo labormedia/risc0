@@ -102,10 +102,12 @@ pub fn verify_image(args: &Args) -> Result<(), Box<dyn Error>> {
         );
     } else {
         // Display the image in the terminal for them to see whether it's Waldo.
+        #[cfg(not(feature = "minimal"))]
         let viuer_config = viuer::Config {
             absolute_offset: false,
             ..Default::default()
         };
+        #[cfg(not(feature = "minimal"))]
         viuer::print_from_file(&args.waldo, &viuer_config)?;
         println!("Prover knows where this cutout is in the given image.");
         println!("Do you recognize this Waldo?");
