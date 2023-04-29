@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#[cfg(not(feature = "minimal"))]
 use image::{DynamicImage, GrayImage, Rgb, RgbImage};
 use serde::{Deserialize, Serialize};
 
@@ -31,6 +32,7 @@ struct ImageChunk {
     height: u32,
 }
 
+#[cfg(not(feature = "minimal"))]
 impl From<RgbImage> for ImageChunk {
     fn from(image: RgbImage) -> Self {
         Self {
@@ -41,6 +43,7 @@ impl From<RgbImage> for ImageChunk {
     }
 }
 
+#[cfg(not(feature = "minimal"))]
 impl Into<RgbImage> for ImageChunk {
     fn into(self: Self) -> RgbImage {
         RgbImage::from_raw(self.width, self.height, self.data).unwrap()
@@ -51,8 +54,11 @@ impl Into<RgbImage> for ImageChunk {
 /// Pixel values are treated as booleans controlling whether or not the
 /// corresponding pixel from the base image is included. A pixel value of 0
 /// results in the corresponding pixel being masked out.
+
+#[cfg(not(feature = "minimal"))]
 pub struct ImageMask(pub GrayImage);
 
+#[cfg(not(feature = "minimal"))]
 impl ImageMask {
     /// Apply the mask to the given image, masking out any pixels in image where
     /// the mask contains a 0 value. Any mask pixel value of greater than
@@ -85,12 +91,14 @@ impl ImageMask {
     }
 }
 
+#[cfg(not(feature = "minimal"))]
 impl From<DynamicImage> for ImageMask {
     fn from(image: DynamicImage) -> Self {
         Self(image.into_luma8())
     }
 }
 
+#[cfg(not(feature = "minimal"))]
 impl From<GrayImage> for ImageMask {
     fn from(image: GrayImage) -> Self {
         Self(image)
@@ -106,6 +114,7 @@ impl From<GrayImage> for ImageMask {
 /// will be truncated and on the bottom edge the height will be truncated.
 pub struct ImageMerkleTree<const N: u32>(MerkleTree<ImageChunk>);
 
+#[cfg(not(feature = "minimal"))]
 impl<const N: u32> ImageMerkleTree<N> {
     pub fn new(image: &DynamicImage) -> Self {
         let chunks: Vec<ImageChunk> = {

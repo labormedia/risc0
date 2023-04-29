@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #![feature(type_ascription)]
+#![feature(error_in_core)]
 
-use std::error::Error;
+use core::error::Error;
 
 use clap::Parser;
 #[cfg(not(feature = "minimal"))]
