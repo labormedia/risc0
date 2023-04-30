@@ -19,4 +19,4 @@ serde = { version = "1.0", default-features = false, optional = true}
 #default = [ "minimal" ]
 #metal = ["risc0-zkvm/metal"]
 #minimal = [ "risc0-zkvm/binfmt", "dep:waldo-core" ]
-minimal = ["dep:bincode"]
+minimal = ["dep:serde"]
