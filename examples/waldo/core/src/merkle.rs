@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::{cmp::Ordering, hash::Hasher, marker::PhantomData, ops::Deref};
+use core::{cmp::Ordering, hash::Hasher, marker::PhantomData, ops::Deref};
 
 use bytemuck::{Pod, Zeroable};
 use merkle_light::{
@@ -26,6 +26,8 @@ use risc0_zkvm::{
     sha::{Digest, Impl, Sha256},
 };
 use serde::{Deserialize, Serialize};
+
+use serde::__private::Vec;
 
 declare_syscall!(
     /// RISC0 syscall for providing oracle access to a vector to the

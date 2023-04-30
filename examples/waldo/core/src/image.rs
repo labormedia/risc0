@@ -18,6 +18,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::merkle::{MerkleTree, Node};
 
+use serde::__private::Vec;
+use merkle_light::hash::Hashable;
+
 /// Recommended default chunk size to use in the ImageMerkleTree and
 /// ImageOracle.
 pub const IMAGE_CHUNK_SIZE: u32 = 8;
@@ -25,11 +28,17 @@ pub const IMAGE_CHUNK_SIZE: u32 = 8;
 // Chunk struct used internally to wrap the raw bytes and include a width value.
 // Important for chunks at the edge of the image which may have a width or
 // height of less than N.
-#[derive(Debug, Clone, Serialize, Deserialize, Hashable)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct ImageChunk {
     data: Vec<u8>,
     width: u32,
     height: u32,
+}
+
+impl<H: core::hash::Hasher> Hashable<H> for ImageChunk {
+    fn hash(&self, h: &mut H) {
+
+    }
 }
 
 #[cfg(not(feature = "minimal"))]
