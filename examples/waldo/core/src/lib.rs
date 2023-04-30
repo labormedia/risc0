@@ -6,7 +6,7 @@
 use serde;
 use bytemuck;
 use divrem;
-use elsa;
+// use elsa;
 use merkle_light;
 use merkle_light_derive;
 use risc0_zkvm;
