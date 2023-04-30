@@ -3824,12 +3824,6 @@ dependencies = [
 [[package]]
 name = "waldo-core"
 version = "0.1.0"
-dependencies = [
- "hex",
- "image 0.24.6 (git+https://github.com/labormedia/image.git?branch=fix-dependencies)",
- "rand",
- "sha2",
-]
 
 [[package]]
 name = "waldo-methods"
