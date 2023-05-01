@@ -3727,7 +3727,6 @@ dependencies = [
  "merkle_light_derive",
  "postcard",
  "rand",
- "rand_chacha",
  "risc0-zkvm 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
  "serde",
  "sha2",
