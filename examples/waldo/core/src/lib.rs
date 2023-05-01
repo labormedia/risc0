@@ -19,14 +19,14 @@ extern crate merkle_light_derive;
 
 #[cfg(not(feature = "minimal"))]
 pub mod image;
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 pub mod merkle;
 
 use serde::{Deserialize, Serialize};
 use serde::__private::Vec;
 
 /// Private input values to the image crop method.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PrivateInput {
     /// Merkle tree root committing to the full Where's Waldo image.
@@ -47,7 +47,7 @@ pub struct PrivateInput {
 }
 
 /// Public journal values that will be committed by the image crop method.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Journal {
     pub subimage: Vec<u8>,

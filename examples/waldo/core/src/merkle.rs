@@ -78,7 +78,8 @@ where
             // TODO: Using bincode here, but it would likely be better on the guest side to
             // use the risc0 serde crate. I should try to use one of
             // those (again).
-            let index: usize = bincode::deserialize::<u32>(data)
+            // let index: usize = bincode::deserialize::<u32>(data)
+            let index: usize = postcard::from_bytes::<u32>(data)
                 .unwrap()
                 .try_into()
                 .unwrap();
@@ -87,7 +88,8 @@ where
             let proof = self.prove(index);
 
             assert!(proof.verify(&self.root(), &value));
-            bincode::serialize(&(value, proof)).unwrap()
+            // bincode::serialize(&(value, proof)).unwrap()
+            postcard::to_allocvec(&(value, proof)).unwrap()
         }
     }
 }
@@ -345,13 +347,17 @@ where
 mod test {
     use rand::Rng;
     use sha2::Digest as Sha2Digest;
+    use rand::SeedableRng;
+    use rand_chacha::ChaChaRng; 
 
     use super::*;
 
     /// Build and return a random Merkle tree with 1028 u32 elements.
     fn random_merkle_tree() -> MerkleTree<u32> {
-        let item_count: usize = rand::thread_rng().gen_range((1 << 10)..(1 << 12));
-        let items: Vec<u32> = (0..item_count).map(|_| rand::thread_rng().gen()).collect();
+        let mut prng = ChaChaRng::from_entropy();
+        // let item_count: usize = rand::thread_rng().gen_range((1 << 10)..(1 << 12));
+        let item_count: usize = prng.gen_range((1 << 10)..(1 << 12));
+        let items: Vec<u32> = (0..item_count).map(|_| prng.gen()).collect();
         MerkleTree::<u32>::new(items)
     }
 
@@ -370,8 +376,10 @@ mod test {
         for (index, item) in tree.elements().iter().enumerate() {
             let proof = tree.prove(index);
 
-            let proof_bytes = bincode::serialize(&proof).unwrap();
-            let proof_deserialized: Proof<u32> = bincode::deserialize(&proof_bytes).unwrap();
+            // let proof_bytes = bincode::serialize(&proof).unwrap();
+            let proof_bytes = postcard::to_allocvec(&proof).unwrap();
+            // let proof_deserialized: Proof<u32> = bincode::deserialize(&proof_bytes).unwrap();
+            let proof_deserialized: Proof<u32> = postcard::from_bytes(&proof_bytes).unwrap();
 
             assert!(proof_deserialized.verify(&tree.root(), &item));
         }
