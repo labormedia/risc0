@@ -15,10 +15,10 @@
 use core::{cmp::Ordering, hash::Hasher, marker::PhantomData, ops::Deref};
 
 use bytemuck::{Pod, Zeroable};
-// use merkle_light::{
-//     hash::{Algorithm, Hashable},
-//     merkle, proof,
-// };
+use merkle_light::{
+    hash::{Algorithm, Hashable},
+    merkle, proof,
+};
 // #[cfg(target_os = "zkvm")]
 // use risc0_zkvm::guest;
 // use risc0_zkvm::{
