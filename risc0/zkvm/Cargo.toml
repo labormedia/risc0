@@ -101,7 +101,7 @@ prove = [
   "std",
 ]
 std = [
-  "anyhow/std",
+#  "anyhow/std",
   "num-traits/std",
   "risc0-circuit-rv32im/std",
   "risc0-zkp/std",
