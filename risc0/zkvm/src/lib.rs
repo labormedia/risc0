@@ -25,5 +25,4 @@ pub mod prove;
 // pub mod serde;
 #[cfg(feature = "prove")]
 mod session;
-#[cfg(not(feature = "minimal"))]
 pub mod sha;
