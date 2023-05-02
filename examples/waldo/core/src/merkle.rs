@@ -25,9 +25,9 @@ use merkle_light::{
 //     declare_syscall,
 //     sha::{Digest, Impl, Sha256},
 // };
-// use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
-// use serde::__private::Vec;
+use serde::__private::Vec;
 
 #[cfg(not(feature = "minimal"))]
 declare_syscall!(
