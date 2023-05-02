@@ -24,5 +24,6 @@ rand = {version="0.8", default-features = false}
 sha2 = {version="0.10", default-features = false}
 
 [features]
-default = [ "minimal" ]
+default = [ "image" ]
+image = ["dep:image"]
 minimal = []
