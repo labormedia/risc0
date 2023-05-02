@@ -21,10 +21,10 @@ use merkle_light::{
 };
 // #[cfg(target_os = "zkvm")]
 // use risc0_zkvm::guest;
-// use risc0_zkvm::{
-//     declare_syscall,
-//     sha::{Digest, Impl, Sha256},
-// };
+use risc0_zkvm::{
+    declare_syscall,
+    sha::{Digest, Impl, Sha256},
+};
 use serde::{Deserialize, Serialize};
 
 use serde::__private::Vec;
