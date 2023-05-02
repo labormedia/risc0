@@ -19,7 +19,7 @@ extern crate merkle_light_derive;
 
 #[cfg(not(feature = "minimal"))]
 pub mod image;
-// #[cfg(not(feature = "minimal"))]
+#[cfg(not(feature = "minimal"))]
 pub mod merkle;
 
 use serde::{Deserialize, Serialize};

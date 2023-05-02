@@ -8,11 +8,11 @@ homepage = { workspace = true }
 repository = { workspace = true }
 
 [dependencies]
-bytemuck = { version = "1.12", features = ["derive"] }
+bytemuck = { version = "1.12", default-features=false, features = ["derive"] }
 rand_core = "0.6"
 
 [dev-dependencies]
-rand = { version = "0.8", features = ["small_rng"] }
+rand = { version = "0.8", default-features=false,features = ["small_rng"] }
 
 [features]
 std = []
