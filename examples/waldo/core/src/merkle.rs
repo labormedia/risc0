@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use core::{cmp::Ordering, hash::Hasher, marker::PhantomData, ops::Deref};
+// use core::{cmp::Ordering, hash::Hasher, marker::PhantomData, ops::Deref};
 
-use bytemuck::{Pod, Zeroable};
-use merkle_light::{
-    hash::{Algorithm, Hashable},
-    merkle, proof,
-};
-#[cfg(target_os = "zkvm")]
-use risc0_zkvm::guest;
-use risc0_zkvm::{
-    declare_syscall,
-    sha::{Digest, Impl, Sha256},
-};
-use serde::{Deserialize, Serialize};
+// use bytemuck::{Pod, Zeroable};
+// use merkle_light::{
+//     hash::{Algorithm, Hashable},
+//     merkle, proof,
+// };
+// #[cfg(target_os = "zkvm")]
+// use risc0_zkvm::guest;
+// use risc0_zkvm::{
+//     declare_syscall,
+//     sha::{Digest, Impl, Sha256},
+// };
+// use serde::{Deserialize, Serialize};
 
-use serde::__private::Vec;
+// use serde::__private::Vec;
 
 #[cfg(not(feature = "minimal"))]
 declare_syscall!(
