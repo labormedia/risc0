@@ -2708,13 +2708,13 @@ dependencies = [
 [[package]]
 name = "risc0-circuit-rv32im"
 version = "0.14.0"
-source = "git+https://github.com/labormedia/risc0.git?branch=fix-dependencies#23b0f4960125c7dd6938b11d3d452aeb948e287d"
+source = "git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs#9eed4d824a64b7cb6285141eabc3d534978ded3d"
 dependencies = [
  "anyhow",
  "log",
- "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-zkp 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
+ "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-zkp 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
  "tracing",
 ]
 
@@ -2740,7 +2740,7 @@ dependencies = [
 [[package]]
 name = "risc0-core"
 version = "0.14.0"
-source = "git+https://github.com/labormedia/risc0.git?branch=fix-dependencies#23b0f4960125c7dd6938b11d3d452aeb948e287d"
+source = "git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs#9eed4d824a64b7cb6285141eabc3d534978ded3d"
 dependencies = [
  "bytemuck",
  "rand_core",
@@ -2786,7 +2786,7 @@ dependencies = [
 [[package]]
 name = "risc0-zkp"
 version = "0.14.0"
-source = "git+https://github.com/labormedia/risc0.git?branch=fix-dependencies#23b0f4960125c7dd6938b11d3d452aeb948e287d"
+source = "git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs#9eed4d824a64b7cb6285141eabc3d534978ded3d"
 dependencies = [
  "anyhow",
  "blake2",
@@ -2796,8 +2796,8 @@ dependencies = [
  "log",
  "paste",
  "rand_core",
- "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
+ "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
  "serde",
  "sha2",
  "tracing",
@@ -2827,7 +2827,7 @@ dependencies = [
 [[package]]
 name = "risc0-zkvm"
 version = "0.14.0"
-source = "git+https://github.com/labormedia/risc0.git?branch=fix-dependencies#23b0f4960125c7dd6938b11d3d452aeb948e287d"
+source = "git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs#9eed4d824a64b7cb6285141eabc3d534978ded3d"
 dependencies = [
  "anyhow",
  "bytemuck",
@@ -2838,10 +2838,10 @@ dependencies = [
  "log",
  "num-derive",
  "num-traits",
- "risc0-circuit-rv32im 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-zkp 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
- "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
+ "risc0-circuit-rv32im 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-core 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-zkp 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
+ "risc0-zkvm-platform 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
  "serde",
  "tracing",
 ]
@@ -2853,7 +2853,7 @@ version = "0.14.0"
 [[package]]
 name = "risc0-zkvm-platform"
 version = "0.14.0"
-source = "git+https://github.com/labormedia/risc0.git?branch=fix-dependencies#23b0f4960125c7dd6938b11d3d452aeb948e287d"
+source = "git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs#9eed4d824a64b7cb6285141eabc3d534978ded3d"
 
 [[package]]
 name = "rlp"
@@ -3727,7 +3727,7 @@ dependencies = [
  "merkle_light_derive",
  "postcard",
  "rand",
- "risc0-zkvm 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=fix-dependencies)",
+ "risc0-zkvm 0.14.0 (git+https://github.com/labormedia/risc0.git?branch=empty-waldo-core-lib.rs)",
  "serde",
  "sha2",
 ]

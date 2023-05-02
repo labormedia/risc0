@@ -79,6 +79,7 @@ where
             // use the risc0 serde crate. I should try to use one of
             // those (again).
             // let index: usize = bincode::deserialize::<u32>(data)
+            // Update: testing postcard as serializer.
             let index: usize = postcard::from_bytes::<u32>(data)
                 .unwrap()
                 .try_into()
