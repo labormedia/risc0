@@ -214,6 +214,7 @@ fn hash_page(page: &[u8]) -> Digest {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(not(feature = "minimal"))]
     use risc0_zkvm_methods::MULTI_TEST_ELF;
     use risc0_zkvm_platform::{
         memory::{DATA, MEM_SIZE, PAGE_TABLE, STACK, SYSTEM, TEXT},
@@ -228,6 +229,7 @@ mod tests {
         PageTableInfo::new(max_mem, page_size)._page_table_size
     }
 
+    #[cfg(not(feature = "minimal"))]
     #[test]
     fn check_integrity() {
         const PAGE_SIZE: u32 = 1024;
