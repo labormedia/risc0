@@ -38,7 +38,6 @@ use crate::{
         hash::{
             blake2b::Blake2bCpuHashSuite,
             poseidon::PoseidonHashSuite,
-            // poseidon_254::Poseidon254HashSuite,
             sha::{cpu::Impl as CpuImpl, Sha256HashSuite},
             HashFn,
             HashSuite,
@@ -48,6 +47,8 @@ use crate::{
     },
     FRI_FOLD,
 };
+#[cfg(feature = "prove")]
+use crate::core::hash::poseidon_254::Poseidon254HashSuite;
 
 pub struct CpuHal<F: Field, HS: HashSuite<F>> {
     phantom: PhantomData<(F, HS)>,

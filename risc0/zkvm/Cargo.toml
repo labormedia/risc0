@@ -27,7 +27,7 @@ getrandom = { version = "0.2", features = ["custom"] }
 hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 risc0-circuit-rv32im = { workspace = true, default-features=false }
 risc0-core = { workspace = true }
-risc0-zkp = { workspace = true, features = [ "minimal" ],  branch = "fix-dependencies" }
+risc0-zkp = { workspace = true, default-features = false, branch = "fix-dependencies" }
 risc0-zkvm-platform = { workspace = true }
 serde = { version = "1.0", default-features = false, features = ["alloc", "derive"] }
 tracing = { version = "0.1", default-features = false, features = ["attributes"] }
@@ -69,7 +69,7 @@ test-log = { version = "0.2", features = ["trace"] }
 
 [features]
 binfmt = ["dep:elf", "test", "minimal"]
-minimal = []
+minimal = [ "risc0-zkp/minimal" ]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
 default = ["binfmt"]

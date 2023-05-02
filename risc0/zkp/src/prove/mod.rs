@@ -19,9 +19,12 @@
 //!
 //! [`risc0_zkvm::prove`]: https://docs.rs/risc0-zkvm/latest/risc0_zkvm/prove/index.html
 
-// mod accum;
-// pub mod adapter;
-// pub mod executor;
+#[cfg(any(feature = "prove"))]
+mod accum;
+#[cfg(any(feature = "prove"))]
+pub mod adapter;
+#[cfg(any(feature = "prove"))]
+pub mod executor;
 mod fri;
 mod merkle;
 pub mod poly_group;
