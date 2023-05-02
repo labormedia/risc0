@@ -68,7 +68,7 @@ tar = "0.4"
 test-log = { version = "0.2", features = ["trace"] }
 
 [features]
-binfmt = ["dep:elf", "test"]
+binfmt = ["dep:elf", "test", "minimal"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
 default = ["binfmt"]
