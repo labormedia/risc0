@@ -2832,7 +2832,6 @@ dependencies = [
  "anyhow",
  "bytemuck",
  "cfg-if",
- "elf",
  "getrandom",
  "hex",
  "log",
