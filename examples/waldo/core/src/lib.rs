@@ -17,7 +17,7 @@
 #[macro_use]
 extern crate merkle_light_derive;
 
-#[cfg(not(feature = "minimal"))]
+#[cfg(feature = "image")]
 pub mod image;
 // #[cfg(not(feature = "minimal"))]
 pub mod merkle;
