@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 #bincode = {version="1.3", default-features = false}
 # replacing bincode by postcard
-postcard = {version="1.0.0", features=["alloc"]}
+postcard = {version="1.0.0", features=["alloc"], default-features = false}
 bytemuck = {version="1.12", default-features = false}
 divrem = {version="1.0", default-features = false}
 elsa = {version="1.7", default-features = false}
