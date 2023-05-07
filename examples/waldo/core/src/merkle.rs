@@ -19,8 +19,8 @@ use merkle_light::{
     hash::{Algorithm, Hashable},
     merkle, proof,
 };
-// #[cfg(target_os = "zkvm")]
-// use risc0_zkvm::guest;
+#[cfg(target_os = "zkvm")]
+use risc0_zkvm::guest;
 use risc0_zkvm::{
     declare_syscall,
     sha::{Digest, Impl, Sha256},

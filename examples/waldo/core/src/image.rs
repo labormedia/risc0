@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[cfg(feature = "minimal")]
+#[cfg(feature = "image")]
 use image::{DynamicImage, GrayImage, Rgb, RgbImage};
 use serde::{Deserialize, Serialize};
 
@@ -153,12 +153,15 @@ impl<const N: u32> ImageMerkleTree<N> {
 
 #[cfg(target_os = "zkvm")]
 mod zkvm {
+
+    extern crate alloc;
     use divrem::{DivCeil, DivRem};
     use elsa::FrozenBTreeMap;
     use image::{GenericImageView, Rgb, RgbImage};
 
     use super::ImageChunk;
     use crate::merkle::{Node, VectorOracle};
+    use alloc::boxed::Box;
 
     /// ImageOracle provides verified access to an image held by the host and
     /// implements image::GenericImageView so that functions from the image

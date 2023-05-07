@@ -13,6 +13,8 @@
 // limitations under the License.
 
 #![no_main]
+#![feature(integer_atomics)]
+// #![feature(target_has_atomic)]
 
 use image::{imageops, GenericImageView};
 use risc0_zkvm::guest::env;

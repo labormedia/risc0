@@ -5,18 +5,19 @@ edition = "2021"
 
 [dependencies]
 #bincode = {version="1.3", default-features = false, optional = true}
-#clap = { version = "4.0", features = ["derive"], default-features = false, optional = true }
+clap = { version = "4.0", features = ["derive"], default-features = false, optional = true }
 #env_logger = { version = "0.10", default-features = false, optional = true}
-#image = { version = "0.24", git = "https://github.com/labormedia/image.git", branch = "fix-dependencies", default-features = false }
+image = { version = "0.24", git = "https://github.com/labormedia/image.git", branch = "fix-dependencies", default-features = false, optional=true }
 #risc0-zkvm = { path = "../../risc0/zkvm", default-features = false, optional = true, features = [ "binfmt" ] }
 serde = { version = "1.0", default-features = false, optional = true}
-#viuer = { version = "0.6", default-features = false, optional = true}
-#waldo-core = { path = "core", default-features = false, optional = true, features = ["minimal"] }
-#waldo-methods = { path = "methods", optional = true }
+viuer = { version = "0.6", default-features = false, optional = true}
+waldo-core = { path = "core", default-features = false, optional = true, features = [] }
+waldo-methods = { path = "methods", optional = true }
 
 [features]
 #cuda = ["risc0-zkvm/cuda"]
-#default = [ "minimal" ]
+default = [ "dep:serde" ]
+unit_test = [ "dep:viuer", "clap/std", "dep:image", "dep:waldo-methods", "waldo-core/image", "dep:serde" ]
 #metal = ["risc0-zkvm/metal"]
 #minimal = [ "risc0-zkvm/binfmt", "dep:waldo-core" ]
-minimal = ["dep:serde"]
+minimal = []
