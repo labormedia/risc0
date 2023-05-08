@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![cfg_attr(not(feature = "std"), no_std)]
+// #![cfg_attr(not(feature = "std"), no_std)]
 
 #[macro_use]
 extern crate merkle_light_derive;
 
 #[cfg(feature = "image")]
 pub mod image;
-// #[cfg(not(feature = "minimal"))]
+
 pub mod merkle;
 
 use serde::{Deserialize, Serialize};

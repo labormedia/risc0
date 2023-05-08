@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 
 use serde::__private::Vec;
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 declare_syscall!(
     /// RISC0 syscall for providing oracle access to a vector to the
     /// guest from the host.
@@ -41,7 +41,7 @@ declare_syscall!(
 /// MerkleTree is a wrapper around the `merkle_light::merkle::MerkleTree`,
 /// created to integrate with the RISC0 SHA256 coprocessor, functionality to act
 /// as a vector oracle for the for the guest, and some convinience functions.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 pub struct MerkleTree<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -50,7 +50,7 @@ where
     elements: Vec<Element>,
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> MerkleTree<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -72,7 +72,7 @@ where
 }
 
 #[cfg(not(target_os = "zkvm"))]
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> MerkleTree<Element>
 where
     Element: Hashable<ShaHasher> + Serialize,
@@ -100,7 +100,7 @@ where
 }
 
 // Implement Deref so that all the methods on the wrapped type are accessible.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> Deref for MerkleTree<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -115,7 +115,7 @@ where
 /// Wrapper for the `merkle_light` inclusion proof. Includes an improved API for
 /// verifying that a proof supports serialization and references an expected
 /// element and position.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(from = "(Vec<Node>, Vec<bool>)", into = "(Vec<Node>, Vec<bool>)")]
 pub struct Proof<Element>
@@ -126,7 +126,7 @@ where
     phantom_elem: PhantomData<Element>,
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -172,7 +172,7 @@ where
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> Clone for Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -185,7 +185,7 @@ where
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> Deref for Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -197,7 +197,7 @@ where
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> From<proof::Proof<Node>> for Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -211,7 +211,7 @@ where
 }
 
 // From tuple representation provided to enable serde deserialization.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> From<(Vec<Node>, Vec<bool>)> for Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -222,7 +222,7 @@ where
 }
 
 // Into tuple representation provided to enable serde deserialization.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl<Element> Into<(Vec<Node>, Vec<bool>)> for Proof<Element>
 where
     Element: Hashable<ShaHasher>,
@@ -234,40 +234,40 @@ where
 
 /// Wrapper on the RISC0 Digest type to allow it to act as a merkle_light
 /// Element.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Pod, Zeroable, Deserialize, Serialize)]
 #[repr(transparent)]
 pub struct Node(Digest);
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl AsRef<[u8]> for Node {
     fn as_ref(&self) -> &[u8] {
         self.0.as_bytes()
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl Ord for Node {
     fn cmp(&self, other: &Self) -> Ordering {
         self.0.cmp(&other.0)
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl PartialOrd for Node {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl From<Digest> for Node {
     fn from(digest: Digest) -> Self {
         Self(digest)
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl Into<Digest> for Node {
     fn into(self) -> Digest {
         self.0
@@ -276,7 +276,7 @@ impl Into<Digest> for Node {
 
 /// ShaHasher is a wrapper around the RISC0 SHA2-256 implementations that
 /// implements the Algorithm trait for use with the merkle_light package.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[derive(Default)]
 pub struct ShaHasher {
     data: Vec<u8>,
@@ -285,7 +285,7 @@ pub struct ShaHasher {
 // NOTE: The Hasher trait is really designed for use with hashmaps and is quite
 // ill-suited as an interface for use by merkle_light. This is one of the design
 // weaknesses of this package.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl Hasher for ShaHasher {
     // NOTE: RISC0 Sha trait currently only provides clean ways to hash data in one
     // shot. To accommodate this, we append the data to an array here and only
@@ -299,7 +299,7 @@ impl Hasher for ShaHasher {
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 impl Algorithm<Node> for ShaHasher {
     fn hash(&mut self) -> Node {
         Node::from(*Impl::hash_bytes(&self.data))
@@ -311,7 +311,7 @@ impl Algorithm<Node> for ShaHasher {
 /// guest will verify a Merkle proof against the root given when the
 /// VectorOracle is created to ensure all accessed values are consistent
 /// with a vector with that root.
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[cfg(target_os = "zkvm")]
 pub struct VectorOracle<Element>
 where
@@ -321,7 +321,7 @@ where
     phantom_elem: PhantomData<Element>,
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[cfg(target_os = "zkvm")]
 impl<Element> VectorOracle<Element>
 where
@@ -348,10 +348,16 @@ where
     // efficient in) the guest.
     pub fn get(&self, index: usize) -> Element {
         let (value, proof): (Element, Proof<Element>) =
-            bincode::deserialize(guest::env::send_recv_slice(
+            // bincode::deserialize(guest::env::send_recv_slice(
+            //     SYS_VECTOR_ORACLE,
+            //     // Cast the index to u32 since usize is an architecture dependent type.
+            //     &bincode::serialize(&(u32::try_from(index).unwrap())).unwrap(),
+            // ))
+            // Testing postcard replacement for bincode.
+            postcard::from_bytes(guest::env::send_recv_slice(
                 SYS_VECTOR_ORACLE,
                 // Cast the index to u32 since usize is an architecture dependent type.
-                &bincode::serialize(&(u32::try_from(index).unwrap())).unwrap(),
+                &postcard::to_allocvec(&(u32::try_from(index).unwrap())).unwrap(),
             ))
             .unwrap();
 
@@ -367,7 +373,7 @@ where
     }
 }
 
-#[cfg(not(feature = "minimal"))]
+// #[cfg(not(feature = "minimal"))]
 #[cfg(test)]
 mod test {
     use rand::Rng;

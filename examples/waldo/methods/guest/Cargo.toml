@@ -6,6 +6,11 @@ edition = "2021"
 [workspace]
 
 [dependencies]
-image = { version = "0.24.5", default-features = false }
+#image = { version = "0.24.5", default-features = false }
+image = { version = "0.24", git = "https://github.com/labormedia/image.git", default-features = false, optional = true }
 risc0-zkvm = { path = "../../../../risc0/zkvm", default-features = false, features = [ ] }
 waldo-core = { path = "../../core" , features = ["image"]}
+
+[features]
+default = ["image"]
+image = ["dep:image"]

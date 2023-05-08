@@ -206,15 +206,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
-name = "bincode"
-version = "1.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
-dependencies = [
- "serde",
-]
-
-[[package]]
 name = "bit_field"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -836,6 +827,12 @@ name = "divrem"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69dde51e8fef5e12c1d65e0929b03d66e4c0c18282bc30ed2ca050ad6f44dd82"
+
+[[package]]
+name = "downcast-rs"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ea835d29036a4087793836fa931b08837ad5e957da9e23886b29586fb9b6650"
 
 [[package]]
 name = "downloader"
@@ -1710,12 +1707,14 @@ dependencies = [
 [[package]]
 name = "image"
 version = "0.24.6"
-source = "git+https://github.com/labormedia/image.git?branch=fix-dependencies#4a648ba0878a6657634d7cce95bc0cc686ff7b14"
+source = "git+https://github.com/labormedia/image.git#139420ddfcf5d4b937987a09769e5f201b7a2a29"
 dependencies = [
  "bytemuck",
+ "byteorder",
  "color_quant",
  "num-rational",
  "num-traits",
+ "png",
 ]
 
 [[package]]
@@ -1890,6 +1889,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f6d5ed8676d904364de097082f4e7d240b571b67989ced0240f08b7f966f940"
 dependencies = [
  "cpufeatures",
+]
+
+[[package]]
+name = "lazy-regex"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff63c423c68ea6814b7da9e88ce585f793c87ddd9e78f646970891769c8235d4"
+dependencies = [
+ "lazy-regex-proc_macros",
+ "once_cell",
+ "regex",
+]
+
+[[package]]
+name = "lazy-regex-proc_macros"
+version = "2.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8edfc11b8f56ce85e207e62ea21557cfa09bb24a8f6b04ae181b086ff8611c22"
+dependencies = [
+ "proc-macro2",
+ "quote 1.0.26",
+ "regex",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -2980,16 +3002,22 @@ dependencies = [
  "bytemuck",
  "cfg-if",
  "elf",
+ "generic-array",
  "getrandom",
  "hex",
+ "lazy-regex",
  "log",
  "num-derive",
  "num-traits",
+ "rand",
+ "rayon",
  "risc0-circuit-rv32im",
  "risc0-core",
  "risc0-zkp",
  "risc0-zkvm-platform",
+ "rrs-lib",
  "serde",
+ "sha2",
  "tracing",
 ]
 
@@ -3017,6 +3045,16 @@ dependencies = [
  "proc-macro2",
  "quote 1.0.26",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "rrs-lib"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b4382d3af3a4ebdae7f64ba6edd9114fff92c89808004c4943b393377a25d001"
+dependencies = [
+ "downcast-rs",
+ "paste",
 ]
 
 [[package]]
@@ -3923,7 +3961,10 @@ name = "waldo"
 version = "0.1.0"
 dependencies = [
  "clap 4.2.7",
- "image 0.24.6 (git+https://github.com/labormedia/image.git?branch=fix-dependencies)",
+ "env_logger",
+ "image 0.24.6 (git+https://github.com/labormedia/image.git)",
+ "postcard",
+ "risc0-zkvm",
  "serde",
  "viuer",
  "waldo-core",
@@ -3934,12 +3975,11 @@ dependencies = [
 name = "waldo-core"
 version = "0.1.0"
 dependencies = [
- "bincode",
  "bytemuck",
  "divrem",
  "elsa",
  "hex",
- "image 0.24.6 (git+https://github.com/labormedia/image.git?branch=fix-dependencies)",
+ "image 0.24.6 (git+https://github.com/labormedia/image.git)",
  "merkle_light",
  "merkle_light_derive",
  "postcard",

@@ -28,6 +28,15 @@ pub const IMAGE_CHUNK_SIZE: u32 = 8;
 // Chunk struct used internally to wrap the raw bytes and include a width value.
 // Important for chunks at the edge of the image which may have a width or
 // height of less than N.
+#[cfg(not(feature = "minimal"))]
+#[derive(Debug, Clone, Serialize, Deserialize, Hashable)]
+struct ImageChunk {
+    data: Vec<u8>,
+    width: u32,
+    height: u32,
+}
+
+#[cfg(feature = "minimal")]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct ImageChunk {
     data: Vec<u8>,
@@ -35,9 +44,10 @@ struct ImageChunk {
     height: u32,
 }
 
+#[cfg(feature = "minimal")]
 impl<H: core::hash::Hasher> Hashable<H> for ImageChunk {
     fn hash(&self, h: &mut H) {
-
+        // TODO: Implement Hashable for no_std attribute.
     }
 }
 
@@ -154,14 +164,16 @@ impl<const N: u32> ImageMerkleTree<N> {
 #[cfg(target_os = "zkvm")]
 mod zkvm {
 
+    #[cfg(feature = "minimal")]
     extern crate alloc;
+    #[cfg(feature = "minimal")]
+    use alloc::boxed::Box;
     use divrem::{DivCeil, DivRem};
     use elsa::FrozenBTreeMap;
     use image::{GenericImageView, Rgb, RgbImage};
 
     use super::ImageChunk;
     use crate::merkle::{Node, VectorOracle};
-    use alloc::boxed::Box;
 
     /// ImageOracle provides verified access to an image held by the host and
     /// implements image::GenericImageView so that functions from the image

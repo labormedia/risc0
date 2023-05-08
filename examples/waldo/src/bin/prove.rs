@@ -129,7 +129,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     let receipt = session.prove()?;
 
     // Save the receipt to disk so it can be sent to the verifier.
+    #[cfg(feature = "bincode")]
     fs::write(&args.receipt, bincode::serialize(&receipt)?)?;
+    #[cfg(feature = "postcard")]
+    fs::write(&args.receipt, postcard::to_allocvec(&receipt)?)?;
 
     println!("Success! Saved the receipt to {}", &args.receipt.display());
 

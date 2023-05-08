@@ -16,10 +16,8 @@
 
 use core::error::Error;
 
-#[cfg(not(feature = "minimal"))]
 use clap::Parser;
-#[cfg(not(feature = "minimal"))]
-use waldo::Args;
+use waldo::verify::Args;
 
 fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(not(feature = "minimal"))]
@@ -28,7 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(not(feature = "minimal"))]
     let args = Args::parse();
     #[cfg(not(feature = "minimal"))]
-    waldo::verify_image(&args)?;
+    waldo::verify::verify_image(&args)?;
 
     Ok(())
 }

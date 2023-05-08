@@ -53,7 +53,10 @@ pub fn verify_image(args: &Args) -> Result<(), Box<dyn Error>> {
     );
 
     // Load and verify the receipt file.
+    #[cfg(feature = "bincode")]
     let receipt: SessionReceipt = bincode::deserialize(&fs::read(&args.receipt)?)?;
+    #[cfg(feature = "postcard")]
+    let receipt: SessionReceipt = postcard::from_bytes(&fs::read(&args.receipt)?)?;
 
     #[cfg(not(feature = "minimal"))]
     receipt.verify(IMAGE_CROP_ID)?;
