@@ -19,6 +19,7 @@
 #![deny(missing_docs)]
 #![feature(error_in_core)]
 #![feature(asm_experimental_arch)]
+#![feature(default_alloc_error_handler)]
 
 extern crate alloc;
 
