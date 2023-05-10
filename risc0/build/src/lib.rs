@@ -18,6 +18,7 @@
 #![doc = include_str!("../README.md")]
 #![deny(missing_docs)]
 #![deny(rustdoc::broken_intra_doc_links)]
+#![feature(default_alloc_error_handler)]
 
 use std::{
     // collections::HashMap,
