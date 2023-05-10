@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// #![cfg_attr(not(feature = "std"), no_std)]
+// #![cfg_attr(not(feature = "std"), feature(alloc_error_handler))]
+
 #![doc = include_str!("../README.md")]
 #![deny(missing_docs)]
 #![deny(rustdoc::broken_intra_doc_links)]
 
 use std::{
-    collections::HashMap,
-    default::Default,
+    // collections::HashMap,
+    // default::Default,
     env,
     fs::{self, File},
     io::{BufRead, BufReader, Write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
 };
+
+use hashbrown::HashMap;
+use core::{
+    default::Default,
+    // fmt::Write,
+    // env,
+};
+// use embedded_io::asynch::{BufRead};
+
 
 use cargo_metadata::{MetadataCommand, Package};
 use downloader::{Download, Downloader};
