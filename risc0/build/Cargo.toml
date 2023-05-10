@@ -10,7 +10,7 @@ repository = { workspace = true }
 [dependencies]
 cargo_metadata = "0.15"
 directories = "5.0"
-downloader = "0.2"
+downloader = { version="0.2", default-features=false}
 risc0-zkvm = { workspace = true, default-features = false, features = ["binfmt"] }
 risc0-zkvm-platform = { workspace = true, default-features = false, features = [ ] }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
