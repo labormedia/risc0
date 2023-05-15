@@ -26,7 +26,7 @@ extern crate alloc;
 #[cfg(feature = "binfmt")]
 pub mod binfmt;
 mod control_id;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature = "test"))]
 mod exec;
 #[cfg(any(target_os = "zkvm", doc, feature = "test"))]
 pub mod guest;
@@ -53,7 +53,7 @@ pub use self::binfmt::{elf::Program, image::MemoryImage};
 #[cfg(feature = "profiler")]
 pub use self::exec::profiler::Profiler;
 pub use self::receipt::{SegmentReceipt, SessionReceipt};
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature = "test"))]
 pub use self::{
     exec::io::{Syscall, SyscallContext},
     exec::{Executor, ExecutorEnv, ExecutorEnvBuilder},
