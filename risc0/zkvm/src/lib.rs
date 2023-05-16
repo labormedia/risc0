@@ -25,7 +25,7 @@ extern crate alloc;
 pub mod binfmt;
 #[cfg(not(feature = "template"))]
 mod control_id;
-#[cfg(all(feature = "prove", feature="template"))]
+#[cfg(any(feature = "prove", feature="template"))]
 mod exec;
 #[cfg(feature = "template")]
 pub mod guest;
