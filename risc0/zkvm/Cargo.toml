@@ -81,12 +81,13 @@ template = [
   "dep:rrs-lib", 
   "dep:lazy-regex", 
   "dep:typetag",
-  "dep:generic-array"
+  "dep:generic-array",
+  "std"
 ]
 binfmt = ["dep:elf", "std"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
-default = []
+default = ["template"]
 dual = []
 profiler = [
   "dep:addr2line",
