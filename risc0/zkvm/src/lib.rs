@@ -20,24 +20,23 @@
 
 extern crate alloc;
 
-#[cfg(not(feature = "template"))]
 #[cfg(feature = "binfmt")]
 pub mod binfmt;
-#[cfg(not(feature = "template"))]
+
 mod control_id;
 #[cfg(any(feature = "prove", feature="template"))]
 mod exec;
 #[cfg(feature = "template")]
 pub mod guest;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature="template"))]
 mod opcode;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature="template"))]
 pub mod prove;
-#[cfg(not(feature = "template"))]
+
 pub mod receipt;
 #[cfg(feature = "template")]
 pub mod serde;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature="template"))]
 mod session;
 pub mod sha;
 
@@ -56,38 +55,43 @@ pub use risc0_zkvm_platform::{declare_syscall, memory::MEM_SIZE, PAGE_SIZE};
 pub use self::binfmt::{elf::Program, image::MemoryImage};
 #[cfg(feature = "profiler")]
 pub use self::exec::profiler::Profiler;
-#[cfg(not(feature = "template"))]
+
 pub use self::receipt::{ExitCode, SegmentReceipt, SessionReceipt};
+#[cfg(any(feature = "template", feature = "prove"))]
+pub use self::{
+    session::{Segment, SegmentRef, Session, SimpleSegmentRef},
+    prove::loader::Loader,
+};
 #[cfg(feature = "prove")]
 pub use self::{
     exec::io::{Syscall, SyscallContext},
     exec::{Executor, ExecutorEnv, ExecutorEnvBuilder},
-    prove::loader::Loader,
-    session::{Segment, SegmentRef, Session, SimpleSegmentRef},
+
+
 };
-#[cfg(not(feature = "template"))]
+
 use crate::control_id::{RawControlId, BLAKE2B_CONTROL_ID, POSEIDON_CONTROL_ID, SHA256_CONTROL_ID};
 
 const CIRCUIT: risc0_circuit_rv32im::CircuitImpl = risc0_circuit_rv32im::CircuitImpl::new();
 
 /// Associate a specific CONTROL_ID with a HashFn.
-#[cfg(not(feature = "template"))]
+
 pub trait ControlId {
     /// The associated CONTROL_ID for a HashFn.
     const CONTROL_ID: RawControlId;
 }
 
-#[cfg(not(feature = "template"))]
+
 impl<S: Sha256> ControlId for Sha256HashFn<S> {
     const CONTROL_ID: RawControlId = SHA256_CONTROL_ID;
 }
 
-#[cfg(not(feature = "template"))]
+
 impl ControlId for PoseidonHashFn {
     const CONTROL_ID: RawControlId = POSEIDON_CONTROL_ID;
 }
 
-#[cfg(not(feature = "template"))]
+
 impl<T: Blake2b> ControlId for Blake2bHashFn<T> {
     const CONTROL_ID: RawControlId = BLAKE2B_CONTROL_ID;
 }
