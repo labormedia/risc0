@@ -16,6 +16,9 @@ use anyhow::{bail, Result};
 use num_traits::FromPrimitive;
 use rrs_lib::{instruction_string_outputter::InstructionStringOutputter, process_instruction};
 
+#[cfg(feature = "template")]
+use alloc::string::String;
+
 #[allow(dead_code)]
 #[derive(Debug, num_derive::FromPrimitive, PartialEq)]
 #[repr(u32)]

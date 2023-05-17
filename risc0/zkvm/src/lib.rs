@@ -18,6 +18,7 @@
 #![deny(rustdoc::broken_intra_doc_links)]
 #![deny(missing_docs)]
 
+#[macro_use]
 extern crate alloc;
 
 #[cfg(feature = "binfmt")]
