@@ -24,19 +24,19 @@ extern crate alloc;
 pub mod binfmt;
 
 mod control_id;
-#[cfg(all(feature = "prove", feature="template"))]
+#[cfg(feature = "prove")]
 mod exec;
-#[cfg(feature = "template")]
+
 pub mod guest;
-#[cfg(all(feature = "prove", feature="template"))]
+#[cfg(any(feature = "prove", feature="template"))]
 mod opcode;
-#[cfg(all(feature = "prove", feature="template"))]
+#[cfg(feature = "prove")]
 pub mod prove;
 
 pub mod receipt;
-#[cfg(feature = "template")]
+
 pub mod serde;
-#[cfg(all(feature = "prove", feature="template"))]
+#[cfg(feature = "prove")]
 mod session;
 pub mod sha;
 
@@ -57,7 +57,7 @@ pub use self::binfmt::{elf::Program, image::MemoryImage};
 pub use self::exec::profiler::Profiler;
 
 pub use self::receipt::{ExitCode, SegmentReceipt, SessionReceipt};
-#[cfg(all(feature = "template", feature = "prove"))]
+#[cfg(feature = "prove")]
 pub use self::{
     session::{Segment, SegmentRef, Session, SimpleSegmentRef},
     prove::loader::Loader,

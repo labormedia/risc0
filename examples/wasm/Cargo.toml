@@ -11,5 +11,5 @@ wat = "1.0"
 
 [features]
 cuda = ["risc0-zkvm/cuda"]
-default = ["risc0-zkvm/template"]
+default = [ ]
 metal = ["risc0-zkvm/metal"]

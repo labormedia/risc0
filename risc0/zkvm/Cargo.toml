@@ -72,16 +72,18 @@ test-log = { version = "0.2", features = ["trace"] }
 
 [features]
 all = ["binfmt", "dual", "profiler", "prove", "std"] # without metal and cuda
-template = [ 
+template = [
 #  "binfmt", 
 #  "dep:sha2", 
 #  "dep:num-bigint", 
 #  "risc0-zkp/prove", 
 #  "risc0-circuit-rv32im/prove", 
-#  "dep:rrs-lib", 
+  "dep:rrs-lib", 
+#  "num-traits/std",
 #  "dep:lazy-regex", 
 #  "dep:typetag",
-#  "dep:generic-array"
+#  "dep:generic-array",
+#  "std"
 ]
 binfmt = ["dep:elf", "std"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
