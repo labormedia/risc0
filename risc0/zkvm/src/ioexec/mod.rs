@@ -141,7 +141,7 @@ impl OpCodeResult {
 // Capture the journal output in a buffer that we can access afterwards.
 #[cfg(feature = "template")]
 #[derive(Clone, Default)]
-struct Journal {
+pub struct Journal {
     buf: Rc<RefCell<Vec<u8>>>,
 }
 
