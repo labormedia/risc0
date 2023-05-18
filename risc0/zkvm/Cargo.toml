@@ -80,7 +80,7 @@ template = [
 #  "risc0-zkp/prove", 
 #  "risc0-circuit-rv32im/prove", 
   "dep:rrs-lib", 
-  "num-traits/std",
+#  "num-traits/std",
 #  "dep:lazy-regex", 
 #  "dep:typetag",
 #  "dep:generic-array",
