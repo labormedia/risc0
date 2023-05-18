@@ -140,6 +140,7 @@ impl OpCodeResult {
 }
 
 // Capture the journal output in a buffer that we can access afterwards.
+/// This should replace the original exec struct.
 #[cfg(feature = "template")]
 #[derive(Clone, Default)]
 pub struct Journal {

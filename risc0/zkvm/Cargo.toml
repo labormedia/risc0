@@ -79,14 +79,13 @@ template = [
   "dep:num-bigint", 
 #  "risc0-zkp/prove", 
 #  "risc0-circuit-rv32im/prove", 
-  "dep:rrs-lib", 
 #  "num-traits/std",
 #  "dep:lazy-regex", 
 #  "dep:typetag",
 #  "dep:generic-array",
 #  "std"
 ]
-ioexec = []
+ioexec = [ "dep:rrs-lib" ]
 binfmt = ["dep:elf", "std"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
