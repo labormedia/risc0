@@ -70,8 +70,6 @@ pub use self::{
 pub use self::{
     exec::io::{Syscall, SyscallContext},
     exec::{Executor, ExecutorEnv, ExecutorEnvBuilder},
-
-
 };
 
 use crate::control_id::{RawControlId, BLAKE2B_CONTROL_ID, POSEIDON_CONTROL_ID, SHA256_CONTROL_ID};

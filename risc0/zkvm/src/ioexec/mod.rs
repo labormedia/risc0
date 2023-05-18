@@ -17,9 +17,9 @@
 //! The result of the execution phase is [Session], which contains one or more
 //! [Segment]s, each which contains an execution trace of the specified program.
 
-#[cfg(feature = "template")]
+#[cfg(all(feature = "template", feature = "ioexec"))]
 mod env;
-#[cfg(feature = "template")]
+#[cfg(all(feature = "template", feature = "ioexec"))]
 pub(crate) mod io;
 #[cfg(all(feature = "template", feature = "ioexec"))]
 mod monitor;
@@ -30,7 +30,10 @@ mod tests;
 
 // use std::{array, cell::RefCell, fmt::Debug, io::Write, mem::take, rc::Rc};
 
-use alloc::rc::Rc;
+use alloc::{
+    vec::Vec,
+    rc::Rc
+};
 
 use core::{
     array,
@@ -62,15 +65,15 @@ use risc0_zkvm_platform::{
 use rrs_lib::{instruction_executor::InstructionExecutor, HartState};
 use serde::{Deserialize, Serialize};
 
-#[cfg(feature = "template")]
+#[cfg(all(feature = "template", feature = "ioexec"))]
 pub use self::env::{ExecutorEnv, ExecutorEnvBuilder};
 #[cfg(all(feature = "template", feature="ioexec"))]
 use self::monitor::MemoryMonitor;
-#[cfg(feature = "template")]
+use crate::receipt::ExitCode;
+#[cfg(all(feature = "template", feature = "ioexec"))]
 use crate::{
     align_up,
     opcode::{MajorType, OpCode},
-    receipt::ExitCode,
     Loader, MemoryImage, Program, Segment, SegmentRef, Session, SimpleSegmentRef,
 };
 
