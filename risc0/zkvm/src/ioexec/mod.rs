@@ -101,13 +101,17 @@ pub struct Executor<'a> {
     split_insn: Option<u32>,
 }
 
+/// This should replace the original exec struct.
 #[cfg(feature = "template")]
 #[derive(Clone, Serialize, Deserialize)]
 pub struct SyscallRecord {
+    /// to guest
     pub to_guest: Vec<u32>,
+    /// registry
     pub regs: (u32, u32),
 }
 
+/// This should replace the original exec struct.
 #[cfg(feature = "template")]
 #[derive(Clone)]
 pub struct OpCodeResult {

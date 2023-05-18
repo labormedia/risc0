@@ -29,7 +29,7 @@ mod control_id;
 mod exec;
 
 #[cfg(feature = "template")]
-mod ioexec;
+pub mod ioexec;
 
 pub mod guest;
 #[cfg(any(feature = "prove", feature="template"))]
