@@ -263,6 +263,8 @@ impl<'a> Executor<'a> {
                 registers,
                 pc: self.pc,
                 last_register_write: None,
+                priv_level: rrs_lib::csrs::PrivLevel::M,
+                csr_set: rrs_lib::csrs::CSRSet::default(),
             };
 
             InstructionExecutor {
