@@ -51,7 +51,7 @@ num-traits = { version = "0.2", default-features = false }
 prost = { version = "0.11", optional = true }
 rand = { version = "0.8", optional = true }
 rayon = { version = "1.5", optional = true }
-rrs-lib = { version = "0.1", git = "https://github.com/labormedia/rrs.git",optional = true, features=["std"] }
+rrs-lib = { version = "0.1", git = "https://github.com/labormedia/rrs.git",optional = true, default-features=false }
 sha2 = { version = "0.10", optional = true }
 typetag = { version = "0.2", optional = true }
 

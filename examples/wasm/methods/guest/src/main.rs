@@ -14,11 +14,16 @@
 
 #![no_main]
 #![allow(unused_imports)]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 risc0_zkvm::guest::entry!(main);
 
 use risc0_zkvm::guest::env;
 use wasmi::{Caller, Engine, Func, Linker, Module, Store};
+#[macro_use]
+extern crate alloc;
+
+use alloc::vec::Vec;
 
 pub fn main() {
     let engine = Engine::default();
