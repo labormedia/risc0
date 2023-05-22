@@ -77,7 +77,7 @@ template = [
 #  "binfmt", 
 #  "dep:sha2", 
   "dep:num-bigint", 
-  "dep:rrs-lib",
+  "dep:rrs-lib/template",
 #  "risc0-zkp/prove", 
 #  "risc0-circuit-rv32im/prove", 
 #  "num-traits/std",
