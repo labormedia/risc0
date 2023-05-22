@@ -87,8 +87,8 @@ template = [
 #  "std"
 ]
 ioexec = [ 
-  "dep:rrs-lib" ,
-  "dep:num-traits"
+  "dep:rrs-lib",
+  "dep:num-bigint", 
 ]
 binfmt = ["dep:elf", "std"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
