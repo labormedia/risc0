@@ -28,7 +28,7 @@ mod control_id;
 #[cfg(feature = "prove")]
 mod exec;
 
-#[cfg(feature = "ioexec")]
+#[cfg(any(feature = "ioexec", feature="template"))]
 pub mod ioexec;
 
 pub mod guest;
