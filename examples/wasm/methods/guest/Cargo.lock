@@ -169,6 +169,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "num_enum"
+version = "0.5.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f646caf906c20226733ed5b1374287eb97e3c2a5c227ce668c1f2ce20ae57c9"
+dependencies = [
+ "num_enum_derive",
+]
+
+[[package]]
+name = "num_enum_derive"
+version = "0.5.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcbff9bc912032c62bf65ef1d5aea88983b420f4f839db1e9b0c281a25c9c799"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "paste"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -260,6 +280,7 @@ dependencies = [
  "risc0-core",
  "risc0-zkp",
  "risc0-zkvm-platform",
+ "rrs-lib",
  "serde",
  "tracing",
 ]
@@ -267,6 +288,16 @@ dependencies = [
 [[package]]
 name = "risc0-zkvm-platform"
 version = "0.14.0"
+
+[[package]]
+name = "rrs-lib"
+version = "0.1.0"
+source = "git+https://github.com/labormedia/rrs.git#c1cbf43c9bbf5ed9c38ee5208738ff908678e7b2"
+dependencies = [
+ "downcast-rs",
+ "num_enum",
+ "paste",
+]
 
 [[package]]
 name = "serde"

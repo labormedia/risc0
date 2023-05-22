@@ -62,7 +62,7 @@ use risc0_zkvm_platform::{
     },
     PAGE_SIZE, WORD_SIZE,
 };
-#[cfg(all(feature = "template", feature = "ioexec"))]
+#[cfg(any(feature = "template", feature = "ioexec"))]
 use rrs_lib::{instruction_executor::InstructionExecutor, HartState};
 use serde::{Deserialize, Serialize};
 
