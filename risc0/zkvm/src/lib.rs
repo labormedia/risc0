@@ -32,7 +32,7 @@ mod exec;
 pub mod ioexec;
 
 pub mod guest;
-#[cfg(any(feature = "prove", feature="template"))]
+#[cfg(all(feature = "prove", feature="template"))]
 mod opcode;
 #[cfg(feature = "prove")]
 pub mod prove;
