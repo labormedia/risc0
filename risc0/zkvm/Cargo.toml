@@ -86,7 +86,10 @@ template = [
 #  "dep:generic-array",
 #  "std"
 ]
-ioexec = [ "dep:rrs-lib" ]
+ioexec = [ 
+  "dep:rrs-lib" ,
+  "dep:num-traits"
+]
 binfmt = ["dep:elf", "std"]
 cuda = ["risc0-circuit-rv32im/cuda", "risc0-zkp/cuda"]
 metal = ["risc0-circuit-rv32im/metal", "risc0-zkp/metal"]
