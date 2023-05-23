@@ -40,7 +40,7 @@ impl Program {
         if elf.ehdr.e_type != elf::abi::ET_EXEC {
             bail!("Invalid ELF type, must be executable");
         }
-        let entry: u32 = elf.ehdr.e_entry.try_into()?;
+        let entry: u32 = elf.ehdr.e_entry.try_into().map_err(Error::msg)?;
         if entry >= max_mem || entry % 4 != 0 {
             bail!("Invalid entrypoint");
         }
