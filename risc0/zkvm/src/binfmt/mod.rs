@@ -14,5 +14,5 @@
 
 //! Manages formatted binaries used by the RISC Zero zkVM
 
-pub(crate) mod elf;
-pub(crate) mod image;
+pub mod elf;
+pub mod image;
