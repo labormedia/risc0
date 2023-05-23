@@ -14,7 +14,7 @@
 
 use alloc::collections::BTreeMap;
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{anyhow, bail, Context, Result, Error};
 use elf::{endian::LittleEndian, file::Class, ElfBytes};
 
 /// A RISC Zero program
@@ -30,7 +30,7 @@ impl Program {
     /// Initialize a RISC Zero Program from an appropriate ELF file
     pub fn load_elf(input: &[u8], max_mem: u32) -> Result<Program> {
         let mut image: BTreeMap<u32, u32> = BTreeMap::new();
-        let elf = ElfBytes::<LittleEndian>::minimal_parse(input)?;
+        let elf = ElfBytes::<LittleEndian>::minimal_parse(input).map_err(Error::msg)?;
         if elf.ehdr.class != Class::ELF32 {
             bail!("Not a 32-bit ELF");
         }
@@ -49,16 +49,16 @@ impl Program {
             bail!("Too many program headers");
         }
         for segment in segments.iter().filter(|x| x.p_type == elf::abi::PT_LOAD) {
-            let file_size: u32 = segment.p_filesz.try_into()?;
+            let file_size: u32 = segment.p_filesz.try_into().map_err(Error::msg)?;
             if file_size >= max_mem {
                 bail!("Invalid segment file_size");
             }
-            let mem_size: u32 = segment.p_memsz.try_into()?;
+            let mem_size: u32 = segment.p_memsz.try_into().map_err(Error::msg)?;
             if mem_size >= max_mem {
                 bail!("Invalid segment mem_size");
             }
-            let vaddr: u32 = segment.p_vaddr.try_into()?;
-            let offset: u32 = segment.p_offset.try_into()?;
+            let vaddr: u32 = segment.p_vaddr.try_into().map_err(Error::msg)?;
+            let offset: u32 = segment.p_offset.try_into().map_err(Error::msg)?;
             for i in (0..mem_size).step_by(4) {
                 let addr = vaddr.checked_add(i).context("Invalid segment vaddr")?;
                 if i >= file_size {
@@ -67,7 +67,7 @@ impl Program {
                 } else {
                     let mut word = 0;
                     // Don't read past the end of the file.
-                    let len = std::cmp::min(file_size - i, 4);
+                    let len = core::cmp::min(file_size - i, 4);
                     for j in 0..len {
                         let offset = (offset + i + j) as usize;
                         let byte = input.get(offset).context("Invalid segment offset")?;

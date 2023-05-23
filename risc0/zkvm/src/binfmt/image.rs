@@ -23,6 +23,7 @@ use risc0_zkvm_platform::{
     WORD_SIZE,
 };
 use serde::{Deserialize, Serialize};
+use alloc::vec::Vec;
 
 use crate::{binfmt::elf::Program, sha};
 
