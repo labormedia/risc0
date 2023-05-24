@@ -13,6 +13,5 @@
 // limitations under the License.
 
 //! Manages formatted binaries used by the RISC Zero zkVM
-
 pub mod elf;
 pub mod image;
