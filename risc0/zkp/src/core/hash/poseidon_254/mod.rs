@@ -16,6 +16,12 @@
 //! security of 128 bits.
 pub(crate) mod consts;
 
+#[cfg(not(feature="std"))]
+use alloc::{
+    vec::Vec,
+    boxed::Box
+};
+
 use risc0_core::field::{
     baby_bear::{BabyBear, BabyBearElem, BabyBearExtElem},
     Elem, ExtElem,

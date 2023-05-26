@@ -19,7 +19,13 @@ use core::{
     marker::PhantomData,
     ops::Range,
 };
+#[cfg(feature="std")]
 use std::{cell::RefCell, rc::Rc};
+
+#[cfg(not(feature="std"))]
+use alloc::rc::Rc;
+#[cfg(not(feature="std"))]
+use core::cell::RefCell;
 
 use bytemuck::Pod;
 use ndarray::{ArrayView, ArrayViewMut, Axis};

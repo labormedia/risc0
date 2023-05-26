@@ -15,7 +15,12 @@
 #[cfg(feature="std")]
 use std::{collections::BTreeMap, sync::Mutex};
 #[cfg(not(feature="std"))]
-use alloc::collections::btree_map::BTreeMap;
+use alloc::{
+    collections::btree_map::BTreeMap,
+    vec::Vec,
+};
+#[cfg(not(feature="std"))]
+use core::str::String;
 #[cfg(not(feature="std"))]
 use spin::Mutex;
 
