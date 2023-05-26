@@ -34,7 +34,7 @@ pub mod ioexec;
 pub mod guest;
 #[cfg(any(feature = "prove", feature="template"))]
 mod opcode;
-#[cfg(feature = "prove")]
+#[cfg(any(feature = "prove", feature="template"))]
 pub mod prove;
 
 pub mod receipt;

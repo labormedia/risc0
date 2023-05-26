@@ -33,12 +33,16 @@
 //! # }
 //! ```
 
+#[cfg(all(feature = "prove", feature="template"))]
 mod exec;
 pub(crate) mod loader;
+#[cfg(all(feature = "prove", feature="template"))]
 mod plonk;
+#[cfg(all(feature = "prove", feature="template"))]
 #[cfg(test)]
 mod tests;
 
+#[cfg(all(feature = "prove", feature="template"))]
 use std::{collections::HashMap, rc::Rc};
 
 use anyhow::Result;
@@ -60,10 +64,13 @@ use risc0_zkp::{
 };
 use risc0_zkvm_platform::WORD_SIZE;
 
+#[cfg(all(feature = "prove", feature="template"))]
 use self::{exec::MachineContext, loader::Loader};
+#[cfg(all(feature = "prove", feature="template"))]
 use crate::{ControlId, Segment, SegmentReceipt, Session, SessionReceipt, CIRCUIT};
 
 /// HAL creation functions for CUDA.
+#[cfg(all(feature = "prove", feature="template"))]
 #[cfg(feature = "cuda")]
 pub mod cuda {
     use std::rc::Rc;
@@ -91,6 +98,7 @@ pub mod cuda {
 }
 
 /// HAL creation functions for Metal.
+#[cfg(all(feature = "prove", feature="template"))]
 #[cfg(feature = "metal")]
 pub mod metal {
     use std::rc::Rc;
@@ -118,6 +126,7 @@ pub mod metal {
 }
 
 /// HAL creation functions for the CPU.
+#[cfg(all(feature = "prove", feature="template"))]
 pub mod cpu {
     use std::rc::Rc;
 
@@ -158,6 +167,7 @@ pub mod cpu {
 }
 
 /// A pair of [Hal] and [EvalCheck].
+#[cfg(all(feature = "prove", feature="template"))]
 #[derive(Clone)]
 pub struct HalEval<H, E>
 where
@@ -187,6 +197,7 @@ pub trait Prover {
 }
 
 /// An implementation of a [Prover] that runs locally.
+#[cfg(all(feature = "prove", feature="template"))]
 pub struct LocalProver<H, E>
 where
     H: Hal<Field = BabyBear, Elem = Elem, ExtElem = ExtElem>,
@@ -197,6 +208,7 @@ where
     hal_eval: HalEval<H, E>,
 }
 
+#[cfg(all(feature = "prove", feature="template"))]
 impl<H, E> LocalProver<H, E>
 where
     H: Hal<Field = BabyBear, Elem = Elem, ExtElem = ExtElem>,
@@ -212,6 +224,7 @@ where
     }
 }
 
+#[cfg(all(feature = "prove", feature="template"))]
 impl<H, E> Prover for LocalProver<H, E>
 where
     H: Hal<Field = BabyBear, Elem = Elem, ExtElem = ExtElem>,
@@ -295,6 +308,7 @@ where
     }
 }
 
+#[cfg(all(feature = "prove", feature="template"))]
 fn provers() -> HashMap<String, Rc<dyn Prover>> {
     let mut table: HashMap<String, Rc<dyn Prover>> = HashMap::new();
     {
@@ -336,6 +350,7 @@ fn provers() -> HashMap<String, Rc<dyn Prover>> {
 
 /// Return a default [Prover] based on environment variables, falling back to a
 /// default CPU-based prover.
+#[cfg(all(feature = "prove", feature="template"))]
 pub fn default_prover() -> Rc<dyn Prover> {
     let provers = provers();
     if let Ok(requested) = std::env::var("RISC0_PROVER") {
@@ -361,6 +376,7 @@ impl Session {
     }
 }
 
+#[cfg(all(feature = "prove", feature="template"))]
 impl Segment {
     /// Call the ZKP system to produce a [SegmentReceipt].
     pub fn prove(&self) -> Result<SegmentReceipt> {
