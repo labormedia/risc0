@@ -23,6 +23,12 @@ use core::{
 use std::{cell::RefCell, rc::Rc};
 
 #[cfg(not(feature="std"))]
+use core::{
+    mem::size_of,
+    iter::repeat_with,
+};
+
+#[cfg(not(feature="std"))]
 use alloc::rc::Rc;
 #[cfg(not(feature="std"))]
 use core::cell::RefCell;
@@ -93,7 +99,7 @@ impl<T> TrackedVec<T> {
         TRACKER
             .lock()
             .unwrap()
-            .alloc(vec.capacity() * std::mem::size_of::<T>());
+            .alloc(vec.capacity() * core::mem::size_of::<T>());
         Self(vec)
     }
 }
@@ -103,7 +109,7 @@ impl<T> Drop for TrackedVec<T> {
         TRACKER
             .lock()
             .unwrap()
-            .free(self.0.capacity() * std::mem::size_of::<T>());
+            .free(self.0.capacity() * core::mem::size_of::<T>());
     }
 }
 
