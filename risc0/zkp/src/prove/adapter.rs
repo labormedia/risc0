@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[cfg(feature="std")]
-use std::sync::Mutex;
-
-#[cfg(not(feature="std"))]
-use spin::Mutex;
-
-#[cfg(not(feature="std"))]
+#[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
+#[cfg(feature = "std")]
+use std::sync::Mutex;
 
 use rand::thread_rng;
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
+#[cfg(not(feature = "std"))]
+use spin::Mutex;
 
 use crate::{
     adapter::{CircuitDef, CircuitStepContext, CircuitStepHandler, REGISTER_GROUP_ACCUM},
@@ -105,7 +103,10 @@ where
             );
         });
         tracing::info_span!("calc_prefix_products").in_scope(|| {
-            accum.lock().unwrap().calc_prefix_products();
+            accum
+                .lock()
+                .expect("Unexpected Mutex behaviour.")
+                .calc_prefix_products();
         });
         tracing::info_span!("step_verify_accum").in_scope(|| {
             let c = &self.exec.circuit;

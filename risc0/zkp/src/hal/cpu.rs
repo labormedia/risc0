@@ -14,22 +14,14 @@
 
 //! CPU implementation of the HAL.
 
+use alloc::{rc::Rc, vec::Vec};
 use core::{
-    cell::{Ref, RefMut, RefCell},
+    cell::{Ref, RefCell, RefMut},
     marker::PhantomData,
     ops::Range,
 };
-
-#[cfg(not(feature="std"))]
-use core::{
-    mem::size_of,
-    iter::repeat_with,
-};
-
-use alloc::{
-    rc::Rc,
-    vec::Vec,
-};
+#[cfg(not(feature = "std"))]
+use core::{iter::repeat_with, mem::size_of};
 
 use bytemuck::Pod;
 use ndarray::{ArrayView, ArrayViewMut, Axis};
@@ -96,7 +88,7 @@ impl<T> TrackedVec<T> {
     pub fn new(vec: Vec<T>) -> Self {
         TRACKER
             .lock()
-            .unwrap()
+            .expect("Unexpected Mutex behaviour.")
             .alloc(vec.capacity() * core::mem::size_of::<T>());
         Self(vec)
     }
@@ -106,7 +98,7 @@ impl<T> Drop for TrackedVec<T> {
     fn drop(&mut self) {
         TRACKER
             .lock()
-            .unwrap()
+            .expect("Unexpected Mutex behaviour.")
             .free(self.0.capacity() * core::mem::size_of::<T>());
     }
 }

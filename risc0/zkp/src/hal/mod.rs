@@ -20,20 +20,16 @@ pub mod cuda;
 #[cfg(feature = "metal")]
 pub mod metal;
 
-#[cfg(feature="std")]
+#[cfg(not(feature = "std"))]
+use core::{iter::repeat_with, mem::size_of};
+#[cfg(feature = "std")]
 use std::sync::Mutex;
-#[cfg(not(feature="std"))]
-use spin::Mutex;
-
-#[cfg(not(feature="std"))]
-use core::{
-    mem::size_of,
-    iter::repeat_with,
-};
 
 use bytemuck::Pod;
 use lazy_static::lazy_static;
 use risc0_core::field::{Elem, ExtElem, Field, RootsOfUnity};
+#[cfg(not(feature = "std"))]
+use spin::Mutex;
 
 use crate::{
     core::{
@@ -69,7 +65,7 @@ pub trait Hal {
     const CHECK_SIZE: usize = INV_RATE * Self::ExtElem::EXT_SIZE;
 
     fn get_memory_usage(&self) -> usize {
-        TRACKER.lock().unwrap().peak
+        TRACKER.lock().expect("Unexpected Mutex behaviour.").peak
     }
 
     fn alloc_digest(&self, name: &'static str, size: usize) -> Self::Buffer<Digest>;

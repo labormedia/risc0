@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[cfg(feature="std")]
+#[cfg(not(feature = "std"))]
+use alloc::string::{String, ToString};
+#[cfg(not(feature = "std"))]
+use alloc::{collections::btree_map::BTreeMap, vec::Vec};
+#[cfg(feature = "std")]
 use std::{collections::BTreeMap, sync::Mutex};
-#[cfg(not(feature="std"))]
-use alloc::{
-    collections::btree_map::BTreeMap,
-    vec::Vec,
-};
-#[cfg(not(feature="std"))]
-use alloc::string::String;
-#[cfg(not(feature="std"))]
-use spin::Mutex;
 
 use anyhow::Result;
 use risc0_core::field::{Elem, ExtElem, Field};
+#[cfg(not(feature = "std"))]
+use spin::Mutex;
 
 use crate::adapter::CircuitStepHandler;
 
@@ -76,7 +73,7 @@ pub struct Handler<'a, F: Field> {
 
 impl<'a, F: Field> Handler<'a, F> {
     pub fn new(p: &'a Mutex<Accum<F::ExtElem>>) -> Self {
-        let cycles = p.lock().unwrap().cycles;
+        let cycles = p.lock().expect("Unexpected Mutex behaviour.").cycles;
         Handler {
             p,
             kinds: BTreeMap::new(),
@@ -88,7 +85,7 @@ impl<'a, F: Field> Handler<'a, F> {
         if let Some(entry) = self.kinds.get_mut(kind) {
             *entry
         } else {
-            let mut p = self.p.lock().unwrap();
+            let mut p = self.p.lock().expect("Unexpected Mutex behaviour.");
             let ptr = p.get_ptr(kind.to_string());
             self.kinds.insert(kind.to_string(), ptr);
             ptr
