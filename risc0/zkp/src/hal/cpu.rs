@@ -15,12 +15,10 @@
 //! CPU implementation of the HAL.
 
 use core::{
-    cell::{Ref, RefMut},
+    cell::{Ref, RefMut, RefCell},
     marker::PhantomData,
     ops::Range,
 };
-#[cfg(feature="std")]
-use std::{cell::RefCell, rc::Rc};
 
 #[cfg(not(feature="std"))]
 use core::{
@@ -28,13 +26,10 @@ use core::{
     iter::repeat_with,
 };
 
-#[cfg(not(feature="std"))]
 use alloc::{
     rc::Rc,
     vec::Vec,
 };
-#[cfg(not(feature="std"))]
-use core::cell::RefCell;
 
 use bytemuck::Pod;
 use ndarray::{ArrayView, ArrayViewMut, Axis};

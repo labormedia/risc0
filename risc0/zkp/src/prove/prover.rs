@@ -15,7 +15,6 @@
 use log::debug;
 use risc0_core::field::{Elem, ExtElem, RootsOfUnity};
 
-#[cfg(not(feature="std"))]
 use core::iter::repeat_with;
 
 #[cfg(not(feature="std"))]
@@ -58,7 +57,7 @@ impl<'a, H: Hal> Prover<'a, H> {
             hal,
             taps,
             iop: WriteIOP::new(),
-            groups: std::iter::repeat_with(|| None)
+            groups: core::iter::repeat_with(|| None)
                 .take(taps.num_groups())
                 .collect(),
             cycles: 0,
