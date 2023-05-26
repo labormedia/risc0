@@ -23,7 +23,7 @@ pub mod metal;
 #[cfg(feature="std")]
 use std::sync::Mutex;
 #[cfg(not(feature="std"))]
-use spin::sync::Mutex;
+use spin::Mutex;
 
 #[cfg(not(feature="std"))]
 use core::{
