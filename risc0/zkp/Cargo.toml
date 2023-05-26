@@ -63,6 +63,6 @@ prove = [
   "dep:rand",
   "dep:rayon",
   "risc0-sys",
-  "std",
+#  "std",
 ]
 std = ["anyhow/std"]
