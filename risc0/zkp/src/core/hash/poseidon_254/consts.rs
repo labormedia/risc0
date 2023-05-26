@@ -16,7 +16,7 @@ use ff::PrimeField;
 use lazy_static::lazy_static;
 
 #[cfg(not(feature="std"))]
-use alloc::vec:Vec;
+use alloc::vec::Vec;
 
 #[derive(PrimeField)]
 #[PrimeFieldModulus = "21888242871839275222246405745257275088548364400416034343698204186575808495617"]
