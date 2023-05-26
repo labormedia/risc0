@@ -26,10 +26,6 @@ use std::sync::Mutex;
 use spin::sync::Mutex;
 
 #[cfg(not(feature="std"))]
-#[macro_use]
-extern crate alloc;
-
-#[cfg(not(feature="std"))]
 use core::{
     mem::size_of,
     iter::repeat_with,
