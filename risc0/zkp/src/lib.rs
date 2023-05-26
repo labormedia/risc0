@@ -19,6 +19,8 @@
 extern crate alloc;
 #[cfg(feature = "prove")]
 extern crate ff;
+#[cfg(not(feature="std"))]
+extern crate spin;
 
 pub mod adapter;
 pub mod core;

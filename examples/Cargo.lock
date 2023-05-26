@@ -3012,6 +3012,7 @@ dependencies = [
  "risc0-zkvm-platform",
  "serde",
  "sha2",
+ "spin 0.9.8",
  "tracing",
 ]
 

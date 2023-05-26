@@ -28,6 +28,7 @@ risc0-sys = { workspace = true, optional = true }
 risc0-zkvm-platform = { workspace = true }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
 tracing = { version = "0.1", default-features = false, features = ["attributes"] }
+spin = "0.9.8"
 
 [target.'cfg(not(target_os = "zkvm"))'.dependencies]
 log = "0.4"

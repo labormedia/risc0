@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#[cfg(feature="std")]
 use std::{collections::BTreeMap, sync::Mutex};
+#[cfg(not(feature="std"))]
+use alloc::collections::btree_map::BTreeMap;
+#[cfg(not(feature="std"))]
+use spin::Mutex;
 
 use anyhow::Result;
 use risc0_core::field::{Elem, ExtElem, Field};
