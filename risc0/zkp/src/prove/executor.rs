@@ -14,6 +14,9 @@
 
 use core::cmp::max;
 
+#[cfg(not(feature="std"))]
+use alloc::vec::Vec;
+
 use anyhow::{bail, Result};
 use log::debug;
 use rand::thread_rng;

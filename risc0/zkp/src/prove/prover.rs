@@ -15,6 +15,12 @@
 use log::debug;
 use risc0_core::field::{Elem, ExtElem, RootsOfUnity};
 
+#[cfg(not(feature="std"))]
+use core::iter::repeat_with;
+
+#[cfg(not(feature="std"))]
+use alloc::vec::Vec;
+
 use crate::{
     core::{
         hash::HashFn,

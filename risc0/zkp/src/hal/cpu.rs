@@ -29,7 +29,10 @@ use core::{
 };
 
 #[cfg(not(feature="std"))]
-use alloc::rc::Rc;
+use alloc::{
+    rc::Rc,
+    vec::Vec,
+};
 #[cfg(not(feature="std"))]
 use core::cell::RefCell;
 

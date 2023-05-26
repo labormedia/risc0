@@ -18,6 +18,9 @@ use std::sync::Mutex;
 #[cfg(not(feature="std"))]
 use spin::Mutex;
 
+#[cfg(not(feature="std"))]
+use alloc::vec::Vec;
+
 use rand::thread_rng;
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
