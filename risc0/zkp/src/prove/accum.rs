@@ -17,11 +17,10 @@ use alloc::string::{String, ToString};
 #[cfg(not(feature = "std"))]
 use alloc::{collections::btree_map::BTreeMap, vec::Vec};
 #[cfg(feature = "std")]
-use std::{collections::BTreeMap, sync::Mutex};
+use std::collections::BTreeMap;
 
 use anyhow::Result;
 use risc0_core::field::{Elem, ExtElem, Field};
-#[cfg(not(feature = "std"))]
 use spin::Mutex;
 
 use crate::adapter::CircuitStepHandler;
@@ -73,7 +72,7 @@ pub struct Handler<'a, F: Field> {
 
 impl<'a, F: Field> Handler<'a, F> {
     pub fn new(p: &'a Mutex<Accum<F::ExtElem>>) -> Self {
-        let cycles = p.lock().expect("Unexpected Mutex behaviour.").cycles;
+        let cycles = p.lock().cycles;
         Handler {
             p,
             kinds: BTreeMap::new(),
@@ -85,7 +84,7 @@ impl<'a, F: Field> Handler<'a, F> {
         if let Some(entry) = self.kinds.get_mut(kind) {
             *entry
         } else {
-            let mut p = self.p.lock().expect("Unexpected Mutex behaviour.");
+            let mut p = self.p.lock();
             let ptr = p.get_ptr(kind.to_string());
             self.kinds.insert(kind.to_string(), ptr);
             ptr

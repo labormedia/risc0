@@ -13,11 +13,12 @@
 // limitations under the License.
 
 use alloc::vec::Vec;
-use std::sync::Mutex;
 
 use rand::thread_rng;
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
+// use std::sync::Mutex;
+use spin::Mutex;
 #[cfg(not(feature = "std"))]
 use spin::Mutex;
 
@@ -103,7 +104,7 @@ where
         tracing::info_span!("calc_prefix_products").in_scope(|| {
             accum
                 .lock()
-                .expect("Unexpected Mutex behaviour.")
+                // .expect("Unexpected Mutex behaviour.")
                 .calc_prefix_products();
         });
         tracing::info_span!("step_verify_accum").in_scope(|| {
