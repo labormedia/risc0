@@ -874,7 +874,7 @@ dependencies = [
  "base16ct",
  "crypto-bigint",
  "digest",
- "ff",
+ "ff 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "generic-array",
  "group",
  "pkcs8",
@@ -1189,6 +1189,15 @@ version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ded41244b729663b1e574f1b4fb731469f69f79c17667b5d776b16cda0479449"
 dependencies = [
+ "rand_core",
+ "subtle",
+]
+
+[[package]]
+name = "ff"
+version = "0.13.0"
+source = "git+https://github.com/labormedia/ff.git#334fc4c6098523fd4c950a511b29cf6066c1bc5c"
+dependencies = [
  "bitvec",
  "byteorder",
  "ff_derive",
@@ -1199,8 +1208,7 @@ dependencies = [
 [[package]]
 name = "ff_derive"
 version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e9f54704be45ed286151c5e11531316eaef5b8f5af7d597b806fdb8af108d84a"
+source = "git+https://github.com/labormedia/ff.git#334fc4c6098523fd4c950a511b29cf6066c1bc5c"
 dependencies = [
  "addchain",
  "cfg-if",
@@ -1478,7 +1486,7 @@ version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f0f9ef7462f7c099f518d754361858f86d8a07af53ba9af0fe635bbccb151a63"
 dependencies = [
- "ff",
+ "ff 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand_core",
  "subtle",
 ]
@@ -2997,7 +3005,7 @@ dependencies = [
  "bytemuck",
  "cust",
  "digest",
- "ff",
+ "ff 0.13.0 (git+https://github.com/labormedia/ff.git)",
  "hex",
  "lazy_static",
  "log",
