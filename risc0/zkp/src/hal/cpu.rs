@@ -498,10 +498,10 @@ impl<F: Field, HS: HashSuite<F>> Hal for CpuHal<F, HS> {
         let mut output = output.as_slice_mut();
         let mut output =
             ArrayViewMut::from_shape((Self::ExtElem::EXT_SIZE, count), &mut output).unwrap();
-        let output = output.axis_iter_mut(Axis(1)).into_par_iter();
+        let output = output.axis_iter_mut(Axis(1)).into_iter(); //.into_par_iter();
         let input = input.as_slice();
         let input = ArrayView::from_shape((to_add, count), &input).unwrap();
-        let input = input.axis_iter(Axis(1)).into_par_iter();
+        let input = input.axis_iter(Axis(1)).into_iter(); //.into_par_iter();
         output.zip(input).for_each(|(mut output, input)| {
             let mut sum = Self::ExtElem::ZERO;
             for i in input {
