@@ -86,9 +86,9 @@ struct TrackedVec<T>(Vec<T>);
 
 impl<T> TrackedVec<T> {
     pub fn new(vec: Vec<T>) -> Self {
-        TRACKER
+        let mut a = TRACKER
             .lock()
-            .expect("Unexpected Mutex behaviour.")
+            //.expect("Unexpected Mutex behaviour.");
             .alloc(vec.capacity() * core::mem::size_of::<T>());
         Self(vec)
     }
@@ -98,7 +98,7 @@ impl<T> Drop for TrackedVec<T> {
     fn drop(&mut self) {
         TRACKER
             .lock()
-            .expect("Unexpected Mutex behaviour.")
+            // .expect("Unexpected Mutex behaviour.")
             .free(self.0.capacity() * core::mem::size_of::<T>());
     }
 }

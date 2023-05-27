@@ -18,7 +18,7 @@
 
 #[cfg(feature = "prove")]
 extern crate ff;
-#[cfg(not(feature="std"))]
+
 extern crate spin;
 
 #[macro_use]
