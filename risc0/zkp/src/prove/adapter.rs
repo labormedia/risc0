@@ -17,9 +17,6 @@ use alloc::vec::Vec;
 use rand::thread_rng;
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
-// use std::sync::Mutex;
-use spin::Mutex;
-#[cfg(not(feature = "std"))]
 use spin::Mutex;
 
 use crate::{
