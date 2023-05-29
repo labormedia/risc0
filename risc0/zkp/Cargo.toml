@@ -33,14 +33,14 @@ spin = "0.9.8"
 [target.'cfg(not(target_os = "zkvm"))'.dependencies]
 log = "0.4"
 ndarray = { version = "0.15", default-features = false, features = [], optional = true }
-rand = { version = "0.8", default-features = false, features=["small_rng"],optional = true }
+rand = { version = "0.8", default-features = false, features=["getrandom"],optional = true }
 rayon = { version = "1.5", optional = true }
 sha2 = { version = "0.10", default-features = false, features = ["compress"] }
 
 [dev-dependencies]
 criterion = "0.4"
 env_logger = "0.10"
-rand = { version = "0.8", features = ["small_rng"] }
+rand = { version = "0.8", default-features = false, features = ["getrandom"] }
 serial_test = "2.0"
 test-log = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
