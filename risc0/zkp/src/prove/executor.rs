@@ -13,7 +13,10 @@
 // limitations under the License.
 
 #[cfg(not(feature = "std"))]
-use alloc::vec::Vec;
+use alloc::{
+    vec::Vec,
+    boxed::Box
+};
 use core::cmp::max;
 
 use anyhow::{bail, Result};

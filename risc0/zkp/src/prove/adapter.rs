@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use alloc::vec::Vec;
+use alloc::{
+    vec::Vec,
+    boxed::Box
+};
 
 use rand::thread_rng;
 use rand_core::{CryptoRng, RngCore};
