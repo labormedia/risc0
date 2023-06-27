@@ -15,6 +15,7 @@
 use alloc::vec::Vec;
 
 use rand::thread_rng;
+use rand_core::{CryptoRng, RngCore};
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
 use spin::Mutex;
@@ -42,6 +43,7 @@ where
     mix: CpuBuffer<F::Elem>,
     accum: CpuBuffer<F::Elem>,
     steps: usize,
+    rng: Box<dyn RngCore>
 }
 
 impl<'a, F, C, CS> ProveAdapter<'a, F, C, CS>
@@ -57,6 +59,18 @@ where
             mix: CpuBuffer::from(Vec::new()),
             accum: CpuBuffer::from(Vec::new()),
             steps,
+            rng: Box::new(rand::thread_rng())
+        }
+    }
+
+    pub fn new_from_rng(exec: &'a mut Executor<F, C, CS>, rng: impl RngCore + 'static) -> Self {
+        let steps = exec.steps;
+        ProveAdapter {
+            exec,
+            mix: CpuBuffer::from(Vec::new()),
+            accum: CpuBuffer::from(Vec::new()),
+            steps,
+            rng: Box::new(rng)
         }
     }
 
@@ -145,7 +159,41 @@ where
             *value = value.valid_or_zero();
         }
         // Add random noise to end of accum and change invalid element to zero
-        let mut rng = thread_rng();
+        // let mut rng = thread_rng();
+        for i in self.steps - ZK_CYCLES..self.steps {
+            for j in 0..accum_size {
+                accum[j * self.steps + i] = F::Elem::random(&mut self.rng);
+            }
+        }
+    }
+
+    /// Perform 'accumulate' stage, using the iop for any RNG state.
+    #[tracing::instrument(skip_all)]
+    pub fn accumulate_from_rng<R: Rng<F>>(
+        &mut self,
+        iop: &mut WriteIOP<F, R>,
+        mut rng: impl RngCore,
+    ) {
+        // Make the mixing values
+        self.mix = CpuBuffer::from_fn(C::MIX_SIZE, |_| iop.random_elem());
+        // Make and compute accum data
+        let accum_size = self
+            .exec
+            .circuit
+            .get_taps()
+            .group_size(REGISTER_GROUP_ACCUM);
+        self.accum = CpuBuffer::from_fn(self.steps * accum_size, |_| F::Elem::INVALID);
+
+        self.compute_accum();
+
+        // Zero out 'invalid' entries in accum and io
+        let mut accum = self.accum.as_slice_mut();
+        let mut io = self.exec.io.as_slice_mut();
+        for value in accum.iter_mut().chain(io.iter_mut()) {
+            *value = value.valid_or_zero();
+        }
+        // Add random noise to end of accum and change invalid element to zero
+        // let mut rng = thread_rng();
         for i in self.steps - ZK_CYCLES..self.steps {
             for j in 0..accum_size {
                 accum[j * self.steps + i] = F::Elem::random(&mut rng);

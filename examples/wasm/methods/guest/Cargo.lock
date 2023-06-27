@@ -287,6 +287,7 @@ dependencies = [
  "log",
  "num-derive",
  "num-traits",
+ "rand_core",
  "risc0-circuit-rv32im",
  "risc0-core",
  "risc0-zkp",

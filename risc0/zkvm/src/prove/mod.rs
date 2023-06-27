@@ -45,6 +45,9 @@ mod tests;
 #[cfg(all(feature = "prove", feature="template"))]
 use std::{collections::HashMap, rc::Rc};
 
+use rand::thread_rng;
+use rand_core::RngCore;
+
 use anyhow::Result;
 use risc0_circuit_rv32im::{
     layout::{OutBuffer, LAYOUT},
@@ -206,6 +209,7 @@ where
 {
     name: String,
     hal_eval: HalEval<H, E>,
+    rng: Box<dyn RngCore>
 }
 
 #[cfg(all(feature = "prove", feature="template"))]
@@ -220,6 +224,15 @@ where
         Self {
             name: name.to_string(),
             hal_eval,
+            rng: Box::new(thread_rng())
+        }
+    }
+
+    pub fn new_from_rng(name: &str, hal_eval: HalEval<H, E>, rng: impl RngCore + 'static) -> Self {
+        Self {
+            name: name.to_string(),
+            hal_eval,
+            rng: Box::new(rng)
         }
     }
 }
@@ -262,13 +275,13 @@ where
 
         let io = segment.prepare_globals();
         let machine = MachineContext::new(segment);
-        let mut executor = Executor::new(&CIRCUIT, machine, segment.po2, segment.po2, &io);
+        let mut executor = Executor::new_from_rng(&CIRCUIT, machine, segment.po2, segment.po2, &io, rand::thread_rng());
 
         let loader = Loader::new();
         loader.load(|chunk, fini| executor.step(chunk, fini))?;
         executor.finalize();
 
-        let mut adapter = ProveAdapter::new(&mut executor);
+        let mut adapter = ProveAdapter::new_from_rng(&mut executor, rand::thread_rng());
         let mut prover = risc0_zkp::prove::Prover::new(hal, CIRCUIT.get_taps());
 
         adapter.execute(prover.iop());
