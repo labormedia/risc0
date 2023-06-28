@@ -216,7 +216,7 @@ where
     }
 
     #[cfg(not(feature="std"))]
-    fn compute_verify_from_rng<Rng: RngCode>(&mut self, rng: Rng) {
+    fn compute_verify_from_rng<Rng: RngCore>(&mut self, rng: Rng) {
         // let mut rng = thread_rng();
         let code_buf = self.code.as_slice_sync();
         let io_buf = self.io.as_slice_sync();
