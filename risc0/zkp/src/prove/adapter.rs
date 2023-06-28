@@ -130,6 +130,7 @@ where
     }
 
     /// Perform 'accumulate' stage, using the iop for any RNG state.
+    #[cfg(feature="std")]
     #[tracing::instrument(skip_all)]
     pub fn accumulate<R: Rng<F>>(&mut self, iop: &mut WriteIOP<F, R>) {
         // Make the mixing values
