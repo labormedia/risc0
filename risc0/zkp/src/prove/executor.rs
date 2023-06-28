@@ -286,7 +286,7 @@ where
         assert!(self.halted);
         assert_eq!(self.cycle, self.steps - ZK_CYCLES);
 
-        self.compute_verify_with_rng(rng);
+        self.compute_verify_from_rng(rng);
 
         // Zero out 'invalid' entries in data and output.
         self.data
