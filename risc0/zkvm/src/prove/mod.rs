@@ -192,6 +192,9 @@ pub trait Prover {
     /// TODO
     fn prove_segment(&self, segment: &Segment) -> Result<SegmentReceipt>;
 
+    #[cfg(not(feature="std"))]
+    fn prove_segment_with_rng<Rng: RngCore>(&self, segment: &Segment, rng: Rng) -> Result<SegmentReceipt>;
+
     /// TODO
     fn get_peak_memory_usage(&self) -> usize;
 
@@ -270,6 +273,58 @@ where
     }
 
     fn prove_segment(&self, segment: &Segment) -> Result<SegmentReceipt> {
+        log::debug!("prove_segment: {}", self.name);
+        let (hal, eval) = (self.hal_eval.hal.as_ref(), &self.hal_eval.eval);
+
+        let io = segment.prepare_globals();
+        let machine = MachineContext::new(segment);
+        let mut executor = Executor::new_from_rng(&CIRCUIT, machine, segment.po2, segment.po2, &io, rand::thread_rng());
+
+        let loader = Loader::new();
+        loader.load(|chunk, fini| executor.step(chunk, fini))?;
+        executor.finalize();
+
+        let mut adapter = ProveAdapter::new_from_rng(&mut executor, rand::thread_rng());
+        let mut prover = risc0_zkp::prove::Prover::new(hal, CIRCUIT.get_taps());
+
+        adapter.execute(prover.iop());
+
+        prover.set_po2(adapter.po2() as usize);
+
+        prover.commit_group(
+            REGISTER_GROUP_CODE,
+            hal.copy_from_elem("code", &adapter.get_code().as_slice()),
+        );
+        prover.commit_group(
+            REGISTER_GROUP_DATA,
+            hal.copy_from_elem("data", &adapter.get_data().as_slice()),
+        );
+        adapter.accumulate(prover.iop());
+        prover.commit_group(
+            REGISTER_GROUP_ACCUM,
+            hal.copy_from_elem("accum", &adapter.get_accum().as_slice()),
+        );
+
+        let mix = hal.copy_from_elem("mix", &adapter.get_mix().as_slice());
+        let out_slice = &adapter.get_io().as_slice();
+
+        log::debug!("Globals: {:?}", OutBuffer(out_slice).tree(&LAYOUT));
+        let out = hal.copy_from_elem("out", &adapter.get_io().as_slice());
+
+        let seal = prover.finalize(&[&mix, &out], eval.as_ref());
+
+        let receipt = SegmentReceipt {
+            seal,
+            index: segment.index,
+        };
+        let hal = CpuVerifyHal::<_, H::HashSuite, _>::new(&crate::CIRCUIT);
+        receipt.verify_with_hal(&hal)?;
+
+        Ok(receipt)
+    }
+
+    #[cfg(not(feature="std"))]
+    fn prove_segment_with_rng<Rng: RngCore>(&self, segment: &Segment, rng: Rng) -> Result<SegmentReceipt> {
         log::debug!("prove_segment: {}", self.name);
         let (hal, eval) = (self.hal_eval.hal.as_ref(), &self.hal_eval.eval);
 
