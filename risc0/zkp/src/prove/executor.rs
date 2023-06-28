@@ -264,12 +264,29 @@ where
         });
     }
 
+    #[cfg(feature="std")]
     #[tracing::instrument(skip_all)]
     pub fn finalize(&mut self) {
         assert!(self.halted);
         assert_eq!(self.cycle, self.steps - ZK_CYCLES);
 
         self.compute_verify();
+
+        // Zero out 'invalid' entries in data and output.
+        self.data
+            .as_slice_mut()
+            .par_iter_mut()
+            .chain(self.io.as_slice_mut().par_iter_mut())
+            .for_each(|value| *value = value.valid_or_zero());
+    }
+
+    #[cfg(not(feature="std"))]
+    #[tracing::instrument(skip_all)]
+    pub fn finalize_with_rng<Rng: RngCore>(&mut self, rng: Rng) {
+        assert!(self.halted);
+        assert_eq!(self.cycle, self.steps - ZK_CYCLES);
+
+        self.compute_verify_with_rng(rng);
 
         // Zero out 'invalid' entries in data and output.
         self.data
