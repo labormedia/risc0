@@ -21,6 +21,8 @@ use core::cmp::max;
 
 use anyhow::{bail, Result};
 use log::debug;
+
+#[cfg(feature="std")]
 use rand::thread_rng;
 use rand_core::RngCore;
 use rayon::prelude::*;
@@ -216,7 +218,7 @@ where
     }
 
     #[cfg(not(feature="std"))]
-    fn compute_verify_from_rng<Rng: RngCore>(&mut self, rng: Rng) {
+    fn compute_verify_from_rng<Rng: RngCore>(&mut self, mut rng: Rng) {
         // let mut rng = thread_rng();
         let code_buf = self.code.as_slice_sync();
         let io_buf = self.io.as_slice_sync();
