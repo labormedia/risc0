@@ -278,13 +278,13 @@ where
 
         let io = segment.prepare_globals();
         let machine = MachineContext::new(segment);
-        let mut executor = Executor::new_from_rng(&CIRCUIT, machine, segment.po2, segment.po2, &io, rand::thread_rng());
+        let mut executor = Executor::new(&CIRCUIT, machine, segment.po2, segment.po2, &io);
 
         let loader = Loader::new();
         loader.load(|chunk, fini| executor.step(chunk, fini))?;
         executor.finalize();
 
-        let mut adapter = ProveAdapter::new_from_rng(&mut executor, rand::thread_rng());
+        let mut adapter = ProveAdapter::new(&mut executor);
         let mut prover = risc0_zkp::prove::Prover::new(hal, CIRCUIT.get_taps());
 
         adapter.execute(prover.iop());

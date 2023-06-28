@@ -67,8 +67,6 @@ where
     max_po2: usize,
     // Counter for zkVM execution
     pub cycle: usize,
-    // Random generator to adapt for different entropy sources.
-    pub rng: Box<dyn RngCore>
 }
 
 impl<F, C, S> Executor<F, C, S>
@@ -104,39 +102,6 @@ where
             halted: false,
             max_po2,
             cycle: 0,
-            rng: Box::new(rand::thread_rng())
-        }
-    }
-
-    pub fn new_from_rng(
-        circuit: &'static C,
-        handler: S,
-        min_po2: usize,
-        max_po2: usize,
-        io: &[F::Elem],
-        rng: impl RngCore + 'static
-    ) -> Self {
-        let po2 = max(min_po2, MIN_PO2);
-        let taps = circuit.get_taps();
-        let code_size = taps.group_size(REGISTER_GROUP_CODE);
-        let data_size = taps.group_size(REGISTER_GROUP_DATA);
-        let steps = 1 << po2;
-        debug!("po2: {po2}, steps: {steps}, code_size: {code_size}");
-        Executor {
-            circuit,
-            handler,
-            // Initialize trace to min_po2 size
-            code: CpuBuffer::from_fn(steps * code_size, |_| F::Elem::ZERO),
-            code_size,
-            data: CpuBuffer::from_fn(steps * data_size, |_| F::Elem::INVALID),
-            data_size,
-            io: CpuBuffer::from(Vec::from(io)),
-            po2,
-            steps,
-            halted: false,
-            max_po2,
-            cycle: 0,
-            rng: Box::new(rng)
         }
     }
 
@@ -206,6 +171,52 @@ where
     }
 
     fn compute_verify(&mut self) {
+        let mut rng = thread_rng();
+        let code_buf = self.code.as_slice_sync();
+        let io_buf = self.io.as_slice_sync();
+        let data_buf = self.data.as_slice_sync();
+
+        // Make code be all zeros of zk cycles, and data be random
+        for i in self.cycle..self.steps {
+            for j in 0..self.code_size {
+                code_buf.set(j * self.steps + i, F::Elem::ZERO);
+            }
+            for j in 0..self.data_size {
+                data_buf.set(j * self.steps + i, F::Elem::random(&mut rng));
+            }
+        }
+        // Do the verify cycles
+        let args: &[SyncSlice<F::Elem>] = &[code_buf, io_buf, data_buf];
+
+        self.handler.sort("ram");
+        tracing::info_span!("step_verify_mem").in_scope(|| {
+            for i in 0..self.cycle {
+                let ctx = CircuitStepContext {
+                    cycle: i,
+                    size: self.steps,
+                };
+                self.circuit
+                    .step_verify_mem(&ctx, &mut self.handler, args)
+                    .unwrap();
+            }
+        });
+
+        self.handler.sort("bytes");
+        tracing::info_span!("step_verify_bytes").in_scope(|| {
+            for i in 0..self.cycle {
+                let ctx = CircuitStepContext {
+                    cycle: i,
+                    size: self.steps,
+                };
+                self.circuit
+                    .step_verify_bytes(&ctx, &mut self.handler, args)
+                    .unwrap();
+            }
+        });
+    }
+
+    #[cfg(not(feature="std"))]
+    fn compute_verify_from_rng<Rng: RngCode>(&mut self, rng: Rng) {
         // let mut rng = thread_rng();
         let code_buf = self.code.as_slice_sync();
         let io_buf = self.io.as_slice_sync();
@@ -217,7 +228,7 @@ where
                 code_buf.set(j * self.steps + i, F::Elem::ZERO);
             }
             for j in 0..self.data_size {
-                data_buf.set(j * self.steps + i, F::Elem::random(&mut self.rng));
+                data_buf.set(j * self.steps + i, F::Elem::random(&mut rng));
             }
         }
         // Do the verify cycles

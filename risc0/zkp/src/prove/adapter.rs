@@ -17,7 +17,9 @@ use alloc::{
     boxed::Box
 };
 
+#[cfg(feature="std")]
 use rand::thread_rng;
+
 use rand_core::{CryptoRng, RngCore};
 use rayon::prelude::*;
 use risc0_core::field::{Elem, Field};
@@ -46,7 +48,6 @@ where
     mix: CpuBuffer<F::Elem>,
     accum: CpuBuffer<F::Elem>,
     steps: usize,
-    rng: Box<dyn RngCore>
 }
 
 impl<'a, F, C, CS> ProveAdapter<'a, F, C, CS>
@@ -62,18 +63,6 @@ where
             mix: CpuBuffer::from(Vec::new()),
             accum: CpuBuffer::from(Vec::new()),
             steps,
-            rng: Box::new(rand::thread_rng())
-        }
-    }
-
-    pub fn new_from_rng(exec: &'a mut Executor<F, C, CS>, rng: impl RngCore + 'static) -> Self {
-        let steps = exec.steps;
-        ProveAdapter {
-            exec,
-            mix: CpuBuffer::from(Vec::new()),
-            accum: CpuBuffer::from(Vec::new()),
-            steps,
-            rng: Box::new(rng)
         }
     }
 
@@ -162,20 +151,20 @@ where
             *value = value.valid_or_zero();
         }
         // Add random noise to end of accum and change invalid element to zero
-        // let mut rng = thread_rng();
+        let mut rng = thread_rng();
         for i in self.steps - ZK_CYCLES..self.steps {
             for j in 0..accum_size {
-                accum[j * self.steps + i] = F::Elem::random(&mut self.rng);
+                accum[j * self.steps + i] = F::Elem::random(&mut rng);
             }
         }
     }
 
     /// Perform 'accumulate' stage, using the iop for any RNG state.
     #[tracing::instrument(skip_all)]
-    pub fn accumulate_from_rng<R: Rng<F>>(
+    pub fn accumulate_from_rng<R: Rng<F> + rand_core::RngCore>(
         &mut self,
         iop: &mut WriteIOP<F, R>,
-        mut rng: impl RngCore,
+        mut rng: R,
     ) {
         // Make the mixing values
         self.mix = CpuBuffer::from_fn(C::MIX_SIZE, |_| iop.random_elem());
