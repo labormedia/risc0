@@ -172,6 +172,7 @@ where
         new_buf
     }
 
+    #[cfg(feature="std")]
     fn compute_verify(&mut self) {
         let mut rng = thread_rng();
         let code_buf = self.code.as_slice_sync();
